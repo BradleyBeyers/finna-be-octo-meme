@@ -10,7 +10,7 @@ public class Reversi {
 		//default: player one is white
 		boolean player = true;
 		
-		//Santiago is watching this
+		// Internal Egit Test
 		
 	}
 }
