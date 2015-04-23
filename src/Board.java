@@ -28,15 +28,13 @@ public class Board {
 			for(int j=0; j<pieces[i].length; j++)
 			{
 				if (pieces[i][j] == null)
-					System.out.print("-\t");
-				else System.out.print(pieces[i][j].toString() + "\t");
+					System.out.print("-   ");
+				else System.out.print(pieces[i][j].toString() + "   ");
 			}
-			System.out.println();
-			System.out.println();
 			System.out.println();
 			System.out.println();
 		
 		}
-		System.out.println("---------------------------------------------------------");
+		System.out.println("------------------------------");
 	}
 }
