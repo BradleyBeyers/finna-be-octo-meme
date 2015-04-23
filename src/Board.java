@@ -29,13 +29,14 @@ public class Board {
 		}
 		else return false;
 	}
+	//checks from the piece AND SWITCHES VALID PIECES
 	public void check(Piece piece)
 	{
 		int dx = 0, dy = 0;
 		int i = 0;
 		for(i = 1; i<=8; i++);
 		{
-			
+			//check in a line from the piece in each direction 
 			switch(i)
 			{
 				case 1: dx = 0; 
@@ -62,9 +63,12 @@ public class Board {
 						dx = 1;
 						dx = -1;
 			}
+			// check down the line for each piece as listed above
 			checkLine(piece, dx, dy);
 		}
 	}
+	// checks in a straight line to find if the new placement sandwiches pieces together, and converts them if necessary.
+	// return true if it is a valid placement to flip pieces
 	public boolean checkLine(Piece piece, int dx, int dy)
 	{
 		Piece temp = piece;
@@ -77,7 +81,7 @@ public class Board {
 				{
 					if (checkLine(temp, dx, dy))
 					{
-						pieces[temp.x][temp.y].color = !pieces[temp.x][temp.y].color;
+						pieces[temp.x][temp.y].flip();
 						return true;
 					}
 					else return false;
