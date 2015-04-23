@@ -1,9 +1,10 @@
 
 public class Piece {
 
-	int x;
-	int y;
-	boolean color;
+	public int x;
+	public int y;
+	// white = true, black = false
+	public boolean color;
 	
 	public Piece (int xPos, int yPos, boolean Color)
 	{
@@ -24,6 +25,12 @@ public class Piece {
 	public void flip ()
 	{
 		color = !color;
+	}
+	public String toString()
+	{
+		if(color)
+			return "W";
+		else return "B";
 	}
 
 }
