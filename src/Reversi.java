@@ -14,6 +14,7 @@ public class Reversi {
 }
 class Turn
 {
+	Turn previous;
 	//true = white, false = black
 	public boolean player;
 	boolean moved;
@@ -23,10 +24,22 @@ class Turn
 		player = Player;
 		moved = false;
 	}
-	public Turn next()
+	public Turn next(Turn current)
 	{
-		Turn next = new Turn(!player);
-			
+		Turn next = new Turn(!(current.player));
+		next.previous = current;
 		return next;
+	}
+	public boolean move(Piece piece, Board board)
+	{
+		boolean movement = board.place(piece);
+		
+		if (movement)
+			return true;
+		else 
+		{
+			System.out.println("Invalid move. Please make another.");
+			return false;
+		}
 	}
 }
