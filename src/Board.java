@@ -31,6 +31,7 @@ public class Board {
 		else return false;
 	}
 	//checks from the piece AND SWITCHES VALID PIECES
+	//not a checker, more of a move() function
 	public boolean check(Piece piece)
 	{
 		int dx = 0, dy = 0;
