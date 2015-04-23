@@ -10,6 +10,8 @@ public class Reversi {
 		//default: player one is white
 		boolean player = true;
 		
+		// Internal Egit Test
+		
 	}
 }
 class Turn
