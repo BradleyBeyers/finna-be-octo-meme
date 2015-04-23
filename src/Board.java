@@ -31,10 +31,11 @@ public class Board {
 		else return false;
 	}
 	//checks from the piece AND SWITCHES VALID PIECES
-	public void check(Piece piece)
+	public boolean check(Piece piece)
 	{
 		int dx = 0, dy = 0;
 		int i = 0;
+		boolean valid = false;
 		for(i = 1; i<=8; i++);
 		{
 			//check in a line from the piece in each direction 
@@ -65,8 +66,12 @@ public class Board {
 						dx = -1;
 			}
 			// check down the line for each piece as listed above
-			checkLine(piece, dx, dy);
+			boolean temp = checkLine(piece, dx, dy);
+			if (temp)
+				valid = true;
 		}
+		//if valid = true, then it's a valid move and at least one piece has been flipped
+		return valid;
 	}
 	// checks in a straight line to find if the new placement sandwiches pieces together, and converts them if necessary.
 	// return true if it is a valid placement to flip pieces
