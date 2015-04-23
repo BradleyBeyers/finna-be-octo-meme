@@ -32,6 +32,10 @@ public class Board {
 				else System.out.print(pieces[i][j].toString() + "\t");
 			}
 			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+		
 		}
 		System.out.println("---------------------------------------------------------");
 	}
