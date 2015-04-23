@@ -1,0 +1,2 @@
+INDEX VERSION 1.126+C:\Users\AlexH\Documents\GitHub\finna-be-octo-meme\.metadata\.plugins\org.eclipse.jdt.core
+1778818061.index
