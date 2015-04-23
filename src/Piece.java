@@ -22,7 +22,7 @@ public class Piece {
 	{
 		color = Color;
 	}
-	public void flip ()
+	public void flip()
 	{
 		color = !color;
 	}

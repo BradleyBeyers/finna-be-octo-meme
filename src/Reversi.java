@@ -2,12 +2,12 @@ import java.util.*;
 import java.io.*;
 // driver program
 public class Reversi {
+	
+public static Board board = new Board(8); 
 	public static void main (String[] args)
 	{
 		boolean GAMEOVER = false;
-		String WINNER;
-		
-		Board board = new Board(8);
+		//Board board = new Board(8);
 		board.startup();
 		board.render();
 	
@@ -17,20 +17,20 @@ public class Reversi {
 		{
 			if(!GAMEOVER)
 			{
-				boolean player = true;
 				Turn myTurnHuman = new Turn(true);
-				//Turn.move(myTurnHuman.newPiece, board);
+				Turn.move(myTurnHuman.newPiece, board);
+				board.render();
 			}
 			if(!GAMEOVER)
 			{
-				boolean player = false;
-				Turn myTurnAI = new Turn(false);
+				new Turn(false);
 			}
 		}
 	}
 }
 class Turn
 {
+	public Piece newPiece;
 	Turn previous;
 	//true = white, false = black
 	public boolean player;
@@ -39,14 +39,14 @@ class Turn
 	public Turn(boolean Player)
 	{
 		Scanner TurnScanner = new Scanner(System.in);
-		int x;
-		int y;
+		int xint;
+		int yint;
 		player = Player;
 		moved = false;
 		System.out.println("Where would you like to place your piece?");
-		x = TurnScanner.nextInt();
-		y = TurnScanner.nextInt();
-		Piece newPiece = new Piece(x, y, player);
+		xint = TurnScanner.nextInt();
+		yint = TurnScanner.nextInt();
+		newPiece = new Piece(xint, yint, player);
 	}
 	public Turn next(Turn current)
 	{
@@ -54,7 +54,7 @@ class Turn
 		next.previous = current;
 		return next;
 	}
-	public boolean move(Piece piece, Board board)
+	public static boolean move(Piece piece, Board board)
 	{
 		boolean movement = board.place(piece);
 		
