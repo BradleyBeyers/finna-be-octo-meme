@@ -31,4 +31,7 @@ public class Piece {
 		else return "B";
 	}
 
+	public Piece copy() { // Used to avoid pointer ugliness
+		return new Piece(this.x, this.y, this.color);
+	}
 }

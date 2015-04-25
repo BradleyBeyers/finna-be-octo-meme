@@ -31,7 +31,7 @@ class Turn {
 	public Piece newPiece;
 	Turn previous;
 	//true = white, false = black
-	public boolean player;
+	public static boolean player;
 	boolean moved;
 	
 	public Turn(boolean Player) {
@@ -40,6 +40,11 @@ class Turn {
 		int yint;
 		player = Player;
 		moved = false;
+		if (player) {
+			System.out.println("white");
+		} else {
+			System.out.println("black");
+		}
 		System.out.println("Where would you like to place your piece?");
 		xint = TurnScanner.nextInt();
 		yint = TurnScanner.nextInt();
@@ -55,10 +60,10 @@ class Turn {
 	public static boolean move(Piece piece, Board board) {
 		boolean movement = board.place(piece);
 		
-		if (movement)
+		if (movement) {
+			player = !player;
 			return true;
-		else 
-		{
+		} else {
 			System.out.println("Invalid move. Please make another.");
 			return false;
 		}
