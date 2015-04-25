@@ -58,6 +58,7 @@ class Turn {
 	//true = white, false = black
 	public static boolean player;
 	boolean moved;
+	boolean invalidMove;
 	
 	public Turn(boolean Player) {
 		Scanner TurnScanner = new Scanner(System.in);
@@ -70,22 +71,24 @@ class Turn {
 		} else {
 			System.out.println("Black,");
 		}
-		System.out.println("Where would you like to place your piece?");
+		if (!invalidMove)
+			System.out.println("Where would you like to place your piece?");
+		else
+			invalidMove = false;
 		
-		boolean loopcatch;
 		try
 		{
 			xint = TurnScanner.nextInt();
 			yint = TurnScanner.nextInt();
+			newPiece = new Piece(xint, yint, player);
 			
 		}
 		catch (InputMismatchException floyd)
 		{
 			System.out.println("Error: invalid input. Try again");
-			loopcatch = false;
+			invalidMove = false;
 		}
 		
-		newPiece = new Piece(xint, yint, player);
 	}
 
 	public Turn next(Turn current) {
