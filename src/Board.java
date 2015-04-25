@@ -117,13 +117,14 @@ public class Board {
 				//recursively see if it eventually makes a valid chain
 					if (checkLine(temp, dx, dy))
 					{
-						validate = true;
+						//validate = true;
 						//if there's a gap in the middle
 						if(pieces[temp.x][temp.y] == null)
 							return false;
 						//otherwise valid, flip current piece
 						else
 						{
+							validate = true;
 							pieces[temp.x][temp.y].flip();
 							return true;
 						}
