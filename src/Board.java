@@ -6,6 +6,7 @@ public class Board {
 	public int size;
 	public int turncount;
 	public boolean validate;
+	public int pathlength;
 	
 	public Board(int Size)
 	{
@@ -84,9 +85,11 @@ public class Board {
 						break;
 			}
 			// check down the line for each piece as listed above
+			pathlength = 0;
 			boolean temp = checkLine(piece, dx, dy);
 			if (temp)
 				valid = true;
+			
 		}
 		//if valid = true, then it's a valid move and at least one piece has been flipped
 		return valid;
@@ -95,14 +98,23 @@ public class Board {
 	// return true if it is a valid placement to flip pieces
 	public boolean checkLine(Piece piece, int dx, int dy)
 	{
+		pathlength++; 
 		Piece temp = piece.copy();
 		if((temp.x + dx) > 0 && (temp.y + dy > 0) && (temp.x + dx) < pieces.length && (temp.y + dy < pieces.length))
 		{
 			temp.move(temp.x + dx,  temp.y + dy);
+			// if piece i'm currently looking at exists and is of the same color
 			if ((pieces[temp.x][temp.y] != null) && (pieces[temp.x][temp.y].color == piece.color))
+			{
+				// if it has at least one other piece between the two, it's valid
+				if (pathlength >= 1)
 					return true;
+				//otherwise false
+				else return false;
+			}
 			else
 				{
+				//recursively see if it eventually makes a valid chain
 					if (checkLine(temp, dx, dy))
 					{
 						validate = true;
