@@ -4,8 +4,7 @@ import java.io.*;
 public class Reversi {
 	
 public static Board board = new Board(8); 
-	public static void main (String[] args)
-	{
+	public static void main (String[] args) {
 		boolean GAMEOVER = false;
 		//Board board = new Board(8);
 		board.startup();
@@ -13,31 +12,29 @@ public static Board board = new Board(8);
 	
 		
 		//default: player one is white
-		while (!GAMEOVER)
-		{
-			if(!GAMEOVER)
-			{
+		while (!GAMEOVER) {
+
+			if(!GAMEOVER) {
 				Turn myTurnHuman = new Turn(true);
 				Turn.move(myTurnHuman.newPiece, board);
 				board.render();
 			}
-			if(!GAMEOVER)
-			{
+
+			if(!GAMEOVER) {
 				new Turn(false);
 			}
 		}
 	}
 }
-class Turn
-{
+
+class Turn {
 	public Piece newPiece;
 	Turn previous;
 	//true = white, false = black
 	public boolean player;
 	boolean moved;
 	
-	public Turn(boolean Player)
-	{
+	public Turn(boolean Player) {
 		Scanner TurnScanner = new Scanner(System.in);
 		int xint;
 		int yint;
@@ -48,14 +45,14 @@ class Turn
 		yint = TurnScanner.nextInt();
 		newPiece = new Piece(xint, yint, player);
 	}
-	public Turn next(Turn current)
-	{
+
+	public Turn next(Turn current) {
 		Turn next = new Turn(!(current.player));
 		next.previous = current;
 		return next;
 	}
-	public static boolean move(Piece piece, Board board)
-	{
+
+	public static boolean move(Piece piece, Board board) {
 		boolean movement = board.place(piece);
 		
 		if (movement)

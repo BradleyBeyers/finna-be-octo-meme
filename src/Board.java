@@ -20,8 +20,8 @@ public class Board {
 		
 		turncount = 0;
 	}
-	public boolean place(Piece piece)
-	{
+	
+	public boolean place(Piece piece) {
 		if (pieces[piece.x][piece.y] == null)
 		{
 			pieces[piece.x][piece.y] = piece;
@@ -30,6 +30,7 @@ public class Board {
 		}
 		else return false;
 	}
+	
 	//checks from the piece AND SWITCHES VALID PIECES
 	//not a checker, more of a move() function
 	public boolean check(Piece piece)
@@ -100,17 +101,16 @@ public class Board {
 	{
 		//System.out.println("Size: " + size);
 		System.out.println("Turn: " + turncount);
-		for(int i = 0; i< pieces.length; i++)
-		{
-			for(int j=0; j<pieces[i].length; j++)
-			{
+		System.out.println("   0  1  2  3  4  5  6  7  ");
+		for(int i = 0; i< pieces.length; i++) {
+			System.out.print(" " + i);
+			for(int j=0; j<pieces[i].length; j++) {
 				if (pieces[i][j] == null)
-					System.out.print("-   ");
-				else System.out.print(pieces[i][j].toString() + "   ");
+					System.out.print(" - ");
+				else System.out.print(" " + pieces[i][j].toString() + " ");
 			}
 			System.out.println();
 			System.out.println();
-		
 		}
 		System.out.println("------------------------------");
 	}
