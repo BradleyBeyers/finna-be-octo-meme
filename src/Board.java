@@ -103,7 +103,7 @@ public class Board {
 		if((temp.x + dx) > 0 && (temp.y + dy > 0) && (temp.x + dx) < pieces.length && (temp.y + dy < pieces.length))
 		{
 			temp.move(temp.x + dx,  temp.y + dy);
-			// if piece i'm currently looking at exists and is of the same color
+			// if piece i'm currently looking at exists and is of the same color as the original piece
 			if ((pieces[temp.x][temp.y] != null) && (pieces[temp.x][temp.y].color == piece.color))
 			{
 				// if it has at least one other piece between the two, it's valid
@@ -118,14 +118,17 @@ public class Board {
 					if (checkLine(temp, dx, dy))
 					{
 						validate = true;
+						//if there's a gap in the middle
 						if(pieces[temp.x][temp.y] == null)
 							return false;
+						//otherwise valid, flip current piece
 						else
 						{
 							pieces[temp.x][temp.y].flip();
 							return true;
 						}
 					}
+					// isn't a valid chain
 					else return false;
 				}
 		}
