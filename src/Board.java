@@ -26,7 +26,7 @@ public class Board {
 		validate = false;
 		if (pieces[piece.x][piece.y] == null)
 		{
-			check(piece);
+			validate = check(piece);
 			if (validate)
 			{
 				pieces[piece.x][piece.y] = piece;
@@ -106,8 +106,13 @@ public class Board {
 					if (checkLine(temp, dx, dy))
 					{
 						validate = true;
-						pieces[temp.x][temp.y].flip();
-						return true;
+						if(pieces[temp.x][temp.y] == null)
+							return false;
+						else
+						{
+							pieces[temp.x][temp.y].flip();
+							return true;
+						}
 					}
 					else return false;
 				}

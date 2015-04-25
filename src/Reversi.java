@@ -72,6 +72,7 @@ class Turn {
 		}
 		System.out.println("Where would you like to place your piece?");
 		
+		boolean loopcatch;
 		try
 		{
 			xint = TurnScanner.nextInt();
@@ -81,6 +82,7 @@ class Turn {
 		catch (InputMismatchException floyd)
 		{
 			System.out.println("Error: invalid input. Try again");
+			loopcatch = false;
 		}
 		
 		newPiece = new Piece(xint, yint, player);
