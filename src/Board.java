@@ -26,6 +26,7 @@ public class Board {
 		{
 			pieces[piece.x][piece.y] = piece;
 			check(piece);
+			turncount++;
 			return true;
 		}
 		else return false;

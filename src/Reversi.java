@@ -44,9 +44,9 @@ class Turn {
 		player = Player;
 		moved = false;
 		if (player) {
-			System.out.println("white");
+			System.out.println("White,");
 		} else {
-			System.out.println("black");
+			System.out.println("Black,");
 		}
 		System.out.println("Where would you like to place your piece?");
 		xint = TurnScanner.nextInt();
