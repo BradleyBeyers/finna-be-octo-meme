@@ -5,6 +5,7 @@ public class Board {
 	public Piece[][] pieces;
 	public int size;
 	public int turncount;
+	public boolean validate;
 	
 	public Board(int Size)
 	{
@@ -22,12 +23,18 @@ public class Board {
 	}
 	
 	public boolean place(Piece piece) {
+		validate = false;
 		if (pieces[piece.x][piece.y] == null)
 		{
-			pieces[piece.x][piece.y] = piece;
 			check(piece);
-			turncount++;
-			return true;
+			if (validate)
+			{
+				pieces[piece.x][piece.y] = piece;
+				turncount++;
+				return true;
+			}
+			else
+				return false;
 		}
 		else return false;
 	}
@@ -98,6 +105,7 @@ public class Board {
 				{
 					if (checkLine(temp, dx, dy))
 					{
+						validate = true;
 						pieces[temp.x][temp.y].flip();
 						return true;
 					}
