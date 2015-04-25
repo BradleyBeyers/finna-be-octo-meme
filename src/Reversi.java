@@ -16,7 +16,10 @@ public static Board board = new Board(8);
 
 			if(!GAMEOVER) {
 				Turn myTurnHuman = new Turn(true);
-				Turn.move(myTurnHuman.newPiece, board);
+				while(Turn.move(myTurnHuman.newPiece, board) == false)
+				{
+					myTurnHuman = new Turn(true);
+				}
 				board.render();
 			}
 
