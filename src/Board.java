@@ -100,7 +100,7 @@ public class Board {
 	{
 		pathlength++; 
 		Piece temp = piece.copy();
-		if((temp.x + dx) > 0 && (temp.y + dy > 0) && (temp.x + dx) < pieces.length && (temp.y + dy < pieces.length))
+		if((temp.x + dx) > 0 && (temp.y + dy > 0) && (temp.x + dx) < pieces.length && (temp.y + dy < pieces.length) && pieces[temp.x + dx][temp.y + dy] != null)
 		{
 			temp.move(temp.x + dx,  temp.y + dy);
 			// if piece i'm currently looking at exists and is of the same color as the original piece
