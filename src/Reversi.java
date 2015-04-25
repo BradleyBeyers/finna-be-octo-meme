@@ -5,16 +5,17 @@ public class Reversi {
 	
 public static Board board = new Board(8); 
 	public static void main (String[] args) {
-		boolean GAMEOVER = false;
+		int white = 0;
+		int black = 0;
 		//Board board = new Board(8);
 		board.startup();
 		board.render();
 	
 		
 		//default: player one is white
-		while (!GAMEOVER) {
+		while (!board.GameOver()) {
 
-			if(!GAMEOVER) {
+			if(!board.GameOver()) {
 				Turn myTurnHuman = new Turn(true);
 				while(Turn.move(myTurnHuman.newPiece, board) == false)
 				{
@@ -23,7 +24,7 @@ public static Board board = new Board(8);
 				board.render();
 			}
 
-			if(!GAMEOVER) {
+			if(!board.GameOver()) {
 				Turn myTurnAI = new Turn(false);
 				while(Turn.move(myTurnAI.newPiece, board) == false)
 				{
@@ -32,6 +33,22 @@ public static Board board = new Board(8);
 				board.render();
 			}
 		}
+		for (int i = 0; i < board.pieces.length; i++)
+		{
+			for (int j = 0; j < board.pieces[i].length; j++)
+			{
+				if (board.pieces[i][j].color == true)
+					white++;
+				else
+					black++;
+			}
+		}
+		if (black>white)
+			System.out.println("Black Wins!! Nice!!");
+		else if (white>black)
+			System.out.println("White Wins!! Sweet!!");
+		else
+			System.out.println("It's a tie!! Woah!!");
 	}
 }
 
