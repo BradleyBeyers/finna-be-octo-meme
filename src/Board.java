@@ -39,34 +39,42 @@ public class Board {
 		int dx = 0, dy = 0;
 		int i = 0;
 		boolean valid = false;
-		for(i = 1; i<=8; i++);
+		for(i = 1; i<=8; i++)
 		{
 			//check in a line from the piece in each direction 
 			switch(i)
 			{
 				case 1: dx = 0; 
 						dy = 1;
+						break;
 				case 2:
 						dx = 0;
 						dy = -1;
+						break;
 				case 3:
 						dx = 1;
 						dy = 0;
+						break;
 				case 4:
 						dx = -1;
 						dy = 0;
+						break;
 				case 5:
 						dx = -1;
 						dy = 1;
+						break;
 				case 6:
 						dx = 1;
 						dy = 1;
+						break;
 				case 7:
 						dx = -1;
 						dy = -1;
+						break;
 				case 8:
 						dx = 1;
 						dx = -1;
+						break;
 			}
 			// check down the line for each piece as listed above
 			boolean temp = checkLine(piece, dx, dy);
@@ -80,7 +88,7 @@ public class Board {
 	// return true if it is a valid placement to flip pieces
 	public boolean checkLine(Piece piece, int dx, int dy)
 	{
-		Piece temp = piece;
+		Piece temp = piece.copy();
 		if(pieces[temp.x + dx][temp.y + dy] != null)
 		{
 			temp.move(temp.x + dx,  temp.y + dy);
