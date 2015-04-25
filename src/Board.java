@@ -73,7 +73,7 @@ public class Board {
 						break;
 				case 8:
 						dx = 1;
-						dx = -1;
+						dy = -1;
 						break;
 			}
 			// check down the line for each piece as listed above
