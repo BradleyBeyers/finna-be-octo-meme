@@ -27,7 +27,7 @@ public class Board {
 		validate = false;
 		if (pieces[piece.x][piece.y] == null)
 		{
-			validate = check(piece);
+			check(piece);
 			if (validate)
 			{
 				pieces[piece.x][piece.y] = piece;

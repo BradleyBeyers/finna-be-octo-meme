@@ -44,11 +44,20 @@ public static Board board = new Board(8);
 			}
 		}
 		if (black>white)
+		{
+			System.out.println("White: " + white + "  Black: " + black);
 			System.out.println("Black Wins!! Nice!!");
+		}
 		else if (white>black)
+		{
+			System.out.println("White: " + white + "  Black: " + black);
 			System.out.println("White Wins!! Sweet!!");
+		}
 		else
+		{
+			System.out.println("White: " + white + "  Black: " + black);
 			System.out.println("It's a tie!! Woah!!");
+		}
 	}
 }
 
