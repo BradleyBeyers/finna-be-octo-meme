@@ -13,9 +13,11 @@ public static Board board = new Board(8);
 	
 		
 		//default: player one is white
-		while (!board.GameOver()) {
+		while (!board.GameOver() && board.MoveDetection(true) && board.MoveDetection(false)) {
 
-			if(!board.GameOver()) {
+			if(!board.MoveDetection(true))
+				System.out.println("White has no moves, it's Black's Turn");
+			if(!board.GameOver() && board.MoveDetection(true)) {
 				Turn myTurnHuman = new Turn(true);
 				while(Turn.move(myTurnHuman.newPiece, board) == false)
 				{
@@ -23,8 +25,9 @@ public static Board board = new Board(8);
 				}
 				board.render();
 			}
-
-			if(!board.GameOver()) {
+			if(!board.MoveDetection(false))
+				System.out.println("Black has no moves, it's White's Turn");
+			if(!board.GameOver() && board.MoveDetection(false)) {
 				Turn myTurnAI = new Turn(false);
 				while(Turn.move(myTurnAI.newPiece, board) == false)
 				{
