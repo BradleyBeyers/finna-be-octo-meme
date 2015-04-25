@@ -44,8 +44,8 @@ class Turn {
 	
 	public Turn(boolean Player) {
 		Scanner TurnScanner = new Scanner(System.in);
-		int xint;
-		int yint;
+		int xint = 0;
+		int yint = 0;
 		player = Player;
 		moved = false;
 		if (player) {
@@ -54,8 +54,18 @@ class Turn {
 			System.out.println("Black,");
 		}
 		System.out.println("Where would you like to place your piece?");
-		xint = TurnScanner.nextInt();
-		yint = TurnScanner.nextInt();
+		
+		try
+		{
+			xint = TurnScanner.nextInt();
+			yint = TurnScanner.nextInt();
+			
+		}
+		catch (InputMismatchException floyd)
+		{
+			System.out.println("Error: invalid input. Try again");
+		}
+		
 		newPiece = new Piece(xint, yint, player);
 	}
 

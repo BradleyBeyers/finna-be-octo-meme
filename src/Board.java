@@ -96,10 +96,10 @@ public class Board {
 	public boolean checkLine(Piece piece, int dx, int dy)
 	{
 		Piece temp = piece.copy();
-		if(pieces[temp.x + dx][temp.y + dy] != null)
+		if((temp.x + dx) > 0 && (temp.y + dy > 0) && (temp.x + dx) < pieces.length && (temp.y + dy < pieces.length))
 		{
 			temp.move(temp.x + dx,  temp.y + dy);
-			if (pieces[temp.x][temp.y].color == piece.color)
+			if ((pieces[temp.x][temp.y] != null) && (pieces[temp.x][temp.y].color == piece.color))
 					return true;
 			else
 				{
