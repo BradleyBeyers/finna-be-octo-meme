@@ -24,7 +24,12 @@ public static Board board = new Board(8);
 			}
 
 			if(!GAMEOVER) {
-				new Turn(false);
+				Turn myTurnAI = new Turn(false);
+				while(Turn.move(myTurnAI.newPiece, board) == false)
+				{
+					myTurnAI = new Turn(false);
+				}
+				board.render();
 			}
 		}
 	}
