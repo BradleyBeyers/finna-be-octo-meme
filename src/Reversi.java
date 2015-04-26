@@ -96,6 +96,15 @@ class Turn {
 		{
 			xint = TurnScanner.nextInt();
 			yint = TurnScanner.nextInt();
+			if (xint < 0 || xint > 7 || yint < 0 || yint > 7)
+			{
+				System.out.println("Not a valid number, Try Again");
+				while (xint < 0 || xint > 7 || yint < 0 || yint > 7)
+				{
+					xint = TurnScanner.nextInt();
+					yint = TurnScanner.nextInt();
+				}
+			}
 			newPiece = new Piece(xint, yint, player);
 			
 		}
