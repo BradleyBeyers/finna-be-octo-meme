@@ -13,7 +13,7 @@ public static Board board = new Board(8);
 	
 		
 		//default: player one is white
-		while (!board.GameOver() && board.MoveDetection(true) && board.MoveDetection(false)) {
+		while (!board.GameOver() && (board.MoveDetection(true) || board.MoveDetection(false))) {
 
 			if(!board.MoveDetection(true) && board.MoveDetection(false))
 				System.out.println("White has no moves, it's Black's Turn");
