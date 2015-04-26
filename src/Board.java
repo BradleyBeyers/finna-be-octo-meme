@@ -264,7 +264,7 @@ public class Board {
 			}
 			else
 				{
-					if (checkLine(temp, dx, dy))
+					if (checkLineTester(temp, dx, dy))
 					{
 						if(pieces[temp.x][temp.y] == null)
 							return false;
