@@ -40,9 +40,9 @@ public static Board board = new Board(8);
 		{
 			for (int j = 0; j < board.pieces[i].length; j++)
 			{
-				if (board.pieces[i][j].color == true)
+				if (board.pieces[i][j] != null && board.pieces[i][j].color == true)
 					white++;
-				else
+				else if (board.pieces[i][j] != null && board.pieces[i][j].color == false)
 					black++;
 			}
 		}
