@@ -23,14 +23,17 @@ public class Board {
 		turncount = 0;
 	}
 	
-	public boolean place(Piece piece) {
+	public boolean place(Piece piece, boolean doFlip) {
 		validate = false;
+		// System.out.println(piece.x + " " + piece.y);
+		// System.out.println(pieces[piece.x][piece.y] == null);
 		if (pieces[piece.x][piece.y] == null)
 		{
-			check(piece);
+			// System.out.println("seriously");
+			check(piece, doFlip);
 			if (validate)
 			{
-				pieces[piece.x][piece.y] = piece;
+				if (doFlip) pieces[piece.x][piece.y] = piece;
 				turncount++;
 				return true;
 			}
@@ -42,7 +45,7 @@ public class Board {
 	
 	//checks from the piece AND SWITCHES VALID PIECES
 	//not a checker, more of a move() function
-	public boolean check(Piece piece)
+	public boolean check(Piece piece, boolean doFlip)
 	{
 		int dx = 0, dy = 0;
 		int i = 0;
@@ -86,7 +89,7 @@ public class Board {
 			}
 			// check down the line for each piece as listed above
 			pathlength = 0;
-			boolean temp = checkLine(piece, dx, dy);
+			boolean temp = checkLine(piece, dx, dy, doFlip);
 			if (temp)
 				valid = true;
 			
@@ -96,7 +99,7 @@ public class Board {
 	}
 	// checks in a straight line to find if the new placement sandwiches pieces together, and converts them if necessary.
 	// return true if it is a valid placement to flip pieces
-	public boolean checkLine(Piece piece, int dx, int dy)
+	public boolean checkLine(Piece piece, int dx, int dy, boolean doFlip)
 	{
 		pathlength++; 
 		Piece temp = piece.copy();
@@ -115,7 +118,7 @@ public class Board {
 			else
 				{
 				//recursively see if it eventually makes a valid chain
-					if (checkLine(temp, dx, dy))
+					if (checkLine(temp, dx, dy, doFlip))
 					{
 						//validate = true;
 						//if there's a gap in the middle
@@ -125,7 +128,7 @@ public class Board {
 						else
 						{
 							validate = true;
-							pieces[temp.x][temp.y].flip();
+							if (doFlip) pieces[temp.x][temp.y].flip();
 							return true;
 						}
 					}
@@ -135,6 +138,7 @@ public class Board {
 		}
 		else return false;
 	}
+
 	public void render()
 	{
 		//System.out.println("Size: " + size);
@@ -173,110 +177,9 @@ public class Board {
 			for (int j = 0; j < pieces[i].length; j++)
 			{
 				Piece PieceTester = new Piece(i,j,color);
-				if (placeTester(PieceTester))
+				if (place(PieceTester, false))
 					return true;
 			}
 		}
 		return false;
 	}
-	
-	
-	//The following are complete copies of place, check, and checkLine that are used in MoveDetection
-	//The only difference being that any code that would cause changes to the board have been removed
-	//The methods only purposes are to check if a move is valid
-	public boolean placeTester(Piece piece) {
-		validate = false;
-		if (pieces[piece.x][piece.y] == null)
-		{
-			checkTester(piece);
-			if (validate)
-			{
-				return true;
-			}
-			else
-				return false;
-		}
-		else return false;
-	}
-	
-	public boolean checkTester(Piece piece)
-	{
-		int dx = 0, dy = 0;
-		int i = 0;
-		boolean valid = false;
-		for(i = 1; i<=8; i++)
-		{
-			switch(i)
-			{
-				case 1: dx = 0; 
-						dy = 1;
-						break;
-				case 2:
-						dx = 0;
-						dy = -1;
-						break;
-				case 3:
-						dx = 1;
-						dy = 0;
-						break;
-				case 4:
-						dx = -1;
-						dy = 0;
-						break;
-				case 5:
-						dx = -1;
-						dy = 1;
-						break;
-				case 6:
-						dx = 1;
-						dy = 1;
-						break;
-				case 7:
-						dx = -1;
-						dy = -1;
-						break;
-				case 8:
-						dx = 1;
-						dy = -1;
-						break;
-			}
-			pathlength = 0;
-			boolean temp = checkLineTester(piece, dx, dy);
-			if (temp)
-				valid = true;
-			
-		}
-		return valid;
-	}
-	
-	public boolean checkLineTester(Piece piece, int dx, int dy)
-	{
-		pathlength++; 
-		Piece temp = piece.copy();
-		if((temp.x + dx >= 0 || dx == 0) && (temp.y + dy >= 0 || dy == 0) && (temp.x + dx < pieces.length || dx == 0) && (temp.y + dy < pieces.length || dy == 0) && pieces[temp.x + dx][temp.y + dy] != null)
-		{
-			temp.move(temp.x + dx,  temp.y + dy);
-			if ((pieces[temp.x][temp.y] != null) && (pieces[temp.x][temp.y].color == piece.color))
-			{
-				if (pathlength >= 1)
-					return true;
-				else return false;
-			}
-			else
-				{
-					if (checkLineTester(temp, dx, dy))
-					{
-						if(pieces[temp.x][temp.y] == null)
-							return false;
-						else
-						{
-							validate = true;
-							return true;
-						}
-					}
-					else return false;
-				}
-		}
-		else return false;
-	}
-}

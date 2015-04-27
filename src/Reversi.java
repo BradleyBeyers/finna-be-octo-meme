@@ -123,7 +123,7 @@ class Turn {
 	}
 
 	public static boolean move(Piece piece, Board board) {
-		boolean movement = board.place(piece);
+		boolean movement = board.place(piece, true);
 		
 		if (movement) {
 			player = !player;
