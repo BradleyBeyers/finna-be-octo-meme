@@ -5,6 +5,8 @@ public class Reversi {
 	public final static boolean WHITE = true;
 	public final static boolean BLACK = false;
 	public static int depthLim;
+	public static int timeLim;
+	public static int totalTimeLim;
 	
 	public static Board board = new Board(8);
 
@@ -13,10 +15,8 @@ public class Reversi {
 	}
 
 	public static void gameAI() {
-		Board currBoard = new Board(8);
+		Board currBoard = new Board(8); //Create a board and declare needed variables for alphabeta
 		boolean currPlayer = false;
-		int timeLim;
-		int totalTimeLim;
 		currBoard.startup();
 
 		Scanner GameScanner = new Scanner(System.in); //Parse initial input to start up the game
@@ -32,8 +32,8 @@ public class Reversi {
 			currPlayer = WHITE;
 		}
 
-		while (true) {
-			int[] nextMove = alphaBeta(currBoard, 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1];
+		while (true) { // Loops forever for now, later will have logic to detect gamestate and end when appropriate
+			int[] nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1]; // AI always goes first (for now)
 			currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
 			currBoard.render();
 			currPlayer = !currPlayer;
@@ -45,18 +45,20 @@ public class Reversi {
 	}
 
 	public static int[][] alphaBeta(Board state, int depth, int alpha, int beta, boolean player) {
+		// state.render();
 		int a = alpha;
 		int b = beta;
 		int value;
+		Board child;
 		int[] bestMove = {-1, -1};
-		int[][] retvalue = {{state.getValue()}, bestMove};
+		int[][] retvalue = {{state.getValue()}, bestMove}; // Moves are coded as an integer array of the form [X, Y]
 		ArrayList<int[]> possibleMoves = new ArrayList<int[]>(0);
 		if (depth == depthLim) return retvalue;
 
 		if (player == WHITE) {
 			possibleMoves = state.getValidMoves(WHITE);
 			for (int[] move : possibleMoves) {
-				Board child = state.child(move, WHITE);
+				child = state.child(move, WHITE);
 				value = alphaBeta(child, depth + 1, a, b, BLACK)[0][0];
 				if (value > a) {
 					a = value;
@@ -67,18 +69,18 @@ public class Reversi {
 			retvalue[0][0] = a;
 			retvalue[1] = bestMove;
 			return retvalue;
-		} else {			
+		} else {
 			possibleMoves = state.getValidMoves(BLACK);
 			for (int[] move : possibleMoves) {
-				Board child = state.child(move, BLACK);
-				value = alphaBeta(child, depth + 1, a, b, BLACK)[0][0];
+				child = state.child(move, BLACK);
+				value = alphaBeta(child, depth + 1, a, b, WHITE)[0][0];
 				if (value < b) {
 					b = value;
 					bestMove = move;
 				}
 				if (beta <= alpha) break;
 			}
-			retvalue[0][0] = a;
+			retvalue[0][0] = b;
 			retvalue[1] = bestMove;
 			return retvalue;
 		}

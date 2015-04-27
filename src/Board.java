@@ -141,8 +141,7 @@ public class Board {
 		else return false;
 	}
 
-	public void render()
-	{
+	public void render() { // Prints out the board with labeled rows / columns (used primarily for testing)
 		System.out.println("   0  1  2  3  4  5  6  7  ");
 		for(int i = 0; i< pieces.length; i++) {
 			System.out.print(" " + i);
@@ -157,8 +156,7 @@ public class Board {
 		System.out.println("------------------------------");
 	}
 	
-	public boolean GameOver()
-	{
+	public boolean GameOver() { // Detects whether the board is full
 		for (int i = 0; i < pieces.length; i++)
 		{
 			for (int j = 0; j < pieces[i].length; j++)
@@ -170,8 +168,7 @@ public class Board {
 		return true;
 	}
 	
-	public boolean MoveDetection(boolean color)
-	{
+	public boolean MoveDetection(boolean color) { // Detects whether the player passed in has any vaild moves
 		for (int i = 0; i < pieces.length; i++)
 		{
 			for (int j = 0; j < pieces[i].length; j++)
@@ -184,7 +181,7 @@ public class Board {
 		return false;
 	}
 
-	public ArrayList<int[]> getValidMoves(boolean color) {
+	public ArrayList<int[]> getValidMoves(boolean color) { // Returns an ArrayList with all the valid moved for the player passed in (again, each move is coded as [X, Y])
 		ArrayList<int[]> out = new ArrayList<int[]>(0);
 
 		for (int i = 0; i < pieces.length; i++)
@@ -202,23 +199,29 @@ public class Board {
 		return out;
 	}
 
-	public Board child(int[] move, boolean color) {
+	public Board child(int[] move, boolean color) { // Takes in an array representing a move with the form [X, Y] and the player making the move, the returns the resulting board
 		Board temp = this.copy();
-		temp.place(new Piece(move[0], move[1], color), color);
+		temp.place(new Piece(move[0], move[1], color), true);
 		return temp;
 	}
 
-	public Board copy() {
+	public Board copy() { // returns a copy of the board (used to avoid pointer shenanigans)
 		Piece[][] c = new Piece[pieces.length][pieces.length];
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces.length; j++) {
-				c[i][j] = pieces[i][j];
+				if (pieces[i][j] == null) {
+					c[i][j] = null;
+				} else if (pieces[i][j].color) {
+					c[i][j] = new Piece(i,j,true);
+				} else {
+					c[i][j] = new Piece(i,j,false);
+				}
 			}
 		}
 		return new Board(c);
 	}
 
-	public int getValue() {
+	public int getValue() { // Heuristic function for determining how good a board is (Can be increased in complexity, currently every white piece is +1 and every black piece is -1)
 		int score = 0;
 
 		for (int i = 0; i < pieces.length; i++) {
