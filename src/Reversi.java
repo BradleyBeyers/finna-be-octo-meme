@@ -8,7 +8,7 @@ public class Reversi {
 	public static Board board = new Board(8);
 
 	public static void main (String[] args) {
-		gameAI();
+		startGame();
 	}
 
 	public static void gameAI() {
@@ -134,7 +134,7 @@ class Turn {
 					yint = TurnScanner.nextInt();
 				}
 			}
-			newPiece = new Piece(xint, yint, player);
+			newPiece = new Piece(yint, xint, player);
 			
 		}
 		catch (InputMismatchException floyd)
