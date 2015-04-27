@@ -143,7 +143,6 @@ public class Board {
 
 	public void render()
 	{
-		System.out.println("Turn: " + turncount);
 		System.out.println("   0  1  2  3  4  5  6  7  ");
 		for(int i = 0; i< pieces.length; i++) {
 			System.out.print(" " + i);
@@ -203,6 +202,12 @@ public class Board {
 		return out;
 	}
 
+	public Board child(int[] move, boolean color) {
+		Board temp = this.copy();
+		temp.place(new Piece(move[0], move[1], color), color);
+		return temp;
+	}
+
 	public Board copy() {
 		Piece[][] c = new Piece[pieces.length][pieces.length];
 		for (int i = 0; i < pieces.length; i++) {
@@ -211,5 +216,21 @@ public class Board {
 			}
 		}
 		return new Board(c);
+	}
+
+	public int getValue() {
+		int score = 0;
+
+		for (int i = 0; i < pieces.length; i++) {
+			for (int j = 0; j < pieces.length; j++) {
+				if (pieces[i][j] != null && pieces[i][j].color == true) {
+					score++;
+				} else if (pieces[i][j] != null && pieces[i][j].color == false) {
+					score--;
+				}
+			}
+		}
+
+		return score;
 	}
 }
