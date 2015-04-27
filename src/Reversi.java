@@ -8,7 +8,29 @@ public class Reversi {
 	public static Board board = new Board(8);
 
 	public static void main (String[] args) {
-		startGame();
+		gameAI();
+	}
+
+	public static void gameAI() {
+		Board currBoard = new Board(8);
+		boolean currPlayer = false;
+		int depthLim;
+		int timeLim;
+		int totalTimeLim;
+		currBoard.startup();
+
+		Scanner GameScanner = new Scanner(System.in);
+		String init = GameScanner.nextLine();
+		String[] initSplit = init.split(" ");
+		depthLim = Integer.valueOf(initSplit[2]);
+		timeLim = Integer.valueOf(initSplit[3]);
+		totalTimeLim = Integer.valueOf(initSplit[4]);
+
+		if (initSplit[1].equals("B")) {
+			currPlayer = true;
+		} else if (initSplit[1].equals("W")) {
+			currPlayer = false;
+		}
 	}
 
 	public static void startGame() {
