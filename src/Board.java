@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 
 public class Board {
 
@@ -13,6 +13,11 @@ public class Board {
 		pieces = new Piece[Size][Size];
 		size = Size;
 	}
+
+	public Board(Piece[][] p) {
+		this.pieces = p;
+	}
+
 	public void startup()
 	{
 		pieces[size/2][size/2] = new Piece(size/2, size/2, true);
@@ -25,11 +30,8 @@ public class Board {
 	
 	public boolean place(Piece piece, boolean doFlip) {
 		validate = false;
-		// System.out.println(piece.x + " " + piece.y);
-		// System.out.println(pieces[piece.x][piece.y] == null);
 		if (pieces[piece.x][piece.y] == null)
 		{
-			// System.out.println("seriously");
 			check(piece, doFlip);
 			if (validate)
 			{
@@ -141,7 +143,6 @@ public class Board {
 
 	public void render()
 	{
-		//System.out.println("Size: " + size);
 		System.out.println("Turn: " + turncount);
 		System.out.println("   0  1  2  3  4  5  6  7  ");
 		for(int i = 0; i< pieces.length; i++) {
@@ -183,3 +184,32 @@ public class Board {
 		}
 		return false;
 	}
+
+	public ArrayList<int[]> getValidMoves(boolean color) {
+		ArrayList<int[]> out = new ArrayList<int[]>(0);
+
+		for (int i = 0; i < pieces.length; i++)
+		{
+			for (int j = 0; j < pieces[i].length; j++)
+			{
+				Piece PieceTester = new Piece(i,j,color);
+				if (place(PieceTester, false)) {
+					int[] newMove = {i, j};
+					out.add(newMove);
+				}
+			}
+		}
+
+		return out;
+	}
+
+	public Board copy() {
+		Piece[][] c = new Piece[pieces.length][pieces.length];
+		for (int i = 0; i < pieces.length; i++) {
+			for (int j = 0; j < pieces.length; j++) {
+				c[i][j] = pieces[i][j];
+			}
+		}
+		return new Board(c);
+	}
+}
