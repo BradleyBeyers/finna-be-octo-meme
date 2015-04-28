@@ -168,7 +168,7 @@ public class Board {
 		return true;
 	}
 	
-	public boolean MoveDetection(boolean color) { // Detects whether the player passed in has any valid moves
+	public boolean MoveDetection(boolean color) { // Detects whether the player passed in has any vaild moves
 		for (int i = 0; i < pieces.length; i++)
 		{
 			for (int j = 0; j < pieces[i].length; j++)
