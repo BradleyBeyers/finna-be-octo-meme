@@ -34,8 +34,15 @@ public class Reversi {
 
 		while (true) { // Loops forever for now, later will have logic to detect gamestate and end when appropriate
 			int[] nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1]; // AI always goes first (for now)
-			currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
-			currBoard.render();
+			if (nextMove != null)
+			{
+				currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
+				currBoard.render();
+				
+			}
+			else
+				System.out.println("No available moves.");
+			
 			currPlayer = !currPlayer;
 			int humanMoveX = GameScanner.nextInt();
 			int humanMoveY = GameScanner.nextInt();
@@ -81,7 +88,10 @@ public class Reversi {
 				if (beta <= alpha) break;
 			}
 			retvalue[0][0] = b;
-			retvalue[1] = bestMove;
+			if (bestMove[0] == -1 && bestMove[1] == -1)
+					retvalue[1] = null;
+			else 
+				retvalue[1] = bestMove;
 			return retvalue;
 		}
 	}
