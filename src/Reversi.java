@@ -61,19 +61,22 @@ public class Reversi {
 			if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true))
 			{
 				human = false;
+				currPlayer = !currPlayer;
 			}
 			else
 				System.out.println("Invalid move.");
-			currPlayer = !currPlayer;
 			
 			//checks for move availability in both parties, ends game if no available moves
-			/*if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer))
+			if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer))
+			{
 				cont = true;
+			}
 			else
 			{
+				System.out.println("Game Over. No available moves");
 				cont = false;
 				
-			}*/
+			}
 		}
 	}
 
