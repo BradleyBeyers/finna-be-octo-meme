@@ -61,10 +61,13 @@ public class Reversi {
 			if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true))
 			{
 				human = false;
-				currPlayer = !currPlayer;
 			}
 			else
+			{
 				System.out.println("Invalid move.");
+				human = true;
+			}
+			currPlayer = !currPlayer;
 			
 			//checks for move availability in both parties, ends game if no available moves
 			if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer))
@@ -189,6 +192,9 @@ public class Reversi {
 	}
 }
 
+// Turn framework, performs all the functions of a turn
+// Generates successor board state.
+// AI players CAN use this!!!!
 class Turn {
 	public Piece newPiece;
 	Turn previous;
