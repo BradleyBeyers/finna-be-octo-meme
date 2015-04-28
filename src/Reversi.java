@@ -51,7 +51,7 @@ public class Reversi {
 				long timeDiff = endTime - startTime; // Takes the difference between the two times to determine how long the move took
 				System.out.println("Took " + timeDiff + "ms to find move and explored " + exploredStates + " states");
 			
-				if (nextMove != null) {
+				if (nextMove[0] != -1 && nextMove[1] != -1) {
 					currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
 					currBoard.render();
 				}
