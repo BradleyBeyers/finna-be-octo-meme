@@ -32,22 +32,48 @@ public class Reversi {
 			currPlayer = WHITE;
 		}
 
-		while (true) { // Loops forever for now, later will have logic to detect gamestate and end when appropriate
-			int[] nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1]; // AI always goes first (for now)
-			if (nextMove != null)
-			{
-				currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
-				currBoard.render();
-				
-			}
-			else
-				System.out.println("No available moves.");
+		boolean cont = true;
+		boolean human = false;
+		
+		while (cont) { // Loops forever for now, later will have logic to detect gamestate and end when appropriate
 			
+			//to prevent turn skipping if the player tries to enter an invalid move
+			if (!human);
+			{
+				int[] nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1]; // AI always goes first (for now)
+			
+				if (nextMove != null)
+				{
+					currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
+					currBoard.render();
+					
+				}
+				else
+					System.out.println("No available moves.");
+			}
 			currPlayer = !currPlayer;
+			human = true;
+			
 			int humanMoveX = GameScanner.nextInt();
 			int humanMoveY = GameScanner.nextInt();
-			currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true);
+			
+			//returns true if valid placement
+			if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true))
+			{
+				human = false;
+			}
+			else
+				System.out.println("Invalid move.");
 			currPlayer = !currPlayer;
+			
+			//checks for move availability in both parties, ends game if no available moves
+			/*if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer))
+				cont = true;
+			else
+			{
+				cont = false;
+				
+			}*/
 		}
 	}
 
