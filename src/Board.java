@@ -7,14 +7,14 @@ public class Board {
 	public int turncount;
 	public boolean validate;
 	public int pathlength;
-	public int[][] scoreBoard = {{10, 2, 2, 2, 2, 2, 2, 10},
-								  {2, 1, 1, 1, 1, 1, 1, 2},
-								  {2, 1, 1, 1, 1, 1, 1, 2},
-								  {2, 1, 1, 1, 1, 1, 1, 2},
-								  {2, 1, 1, 1, 1, 1, 1, 2},
-								  {2, 1, 1, 1, 1, 1, 1, 2},
-								  {2, 1, 1, 1, 1, 1, 1, 2},
-								 {10, 2, 2, 2, 2, 2, 2, 10}};
+	public int[][] scoreBoard = {{99, -8, 8, 6, 6, 8, -8, 99},
+								 {-8, -24, -4, -3, -3, -4, -24, 2},
+								  {8, -4, 7, 4, 4, 7, -4, 2},
+								  {6, -3, 4, 0, 0, 4, -3, 2},
+								  {6, -3, 4, 0, 0, 4, -3, 2},
+								  {8, -4, 7, 4, 4, 7, -4, 2},
+								 {-8, -24, -4, -3, -3, -4, -24, 2},
+								 {99, -8, 8, 6, 6, 8, -8, 99}};
 	
 	public Board(int Size)
 	{
@@ -230,18 +230,19 @@ public class Board {
 	}
 
 	public int getValue() { // Heuristic function for determining how good a board is (Can be increased in complexity, currently every white piece is +1 and every black piece is -1)
-		int score = 0;
+		int max = 0;
+		int min = 0;
 
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces.length; j++) {
 				if (pieces[i][j] != null && pieces[i][j].color == true) {
-					score += scoreBoard[i][j];
+					max += scoreBoard[i][j];
 				} else if (pieces[i][j] != null && pieces[i][j].color == false) {
-					score -= scoreBoard[i][j];
+					min += scoreBoard[i][j];
 				}
 			}
 		}
-
+		int score = 100*((max-min)/(max+min));
 		return score;
 	}
 }
