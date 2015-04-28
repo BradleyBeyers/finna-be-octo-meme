@@ -7,6 +7,7 @@ public class Reversi {
 	public static int depthLim;
 	public static int timeLim;
 	public static int totalTimeLim;
+	public static int exploredStates;
 	
 	public static Board board = new Board(8);
 
@@ -38,15 +39,17 @@ public class Reversi {
 		while (cont) { // Loops forever for now, later will have logic to detect gamestate and end when appropriate
 			
 			//to prevent turn skipping if the player tries to enter an invalid move
-			if (!human);
-			{
+			if (!human) {
+				exploredStates = 0;
+				long startTime = System.currentTimeMillis();
 				int[] nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1]; // AI always goes first (for now)
+				long endTime = System.currentTimeMillis();
+				long timeDiff = endTime - startTime;
+				System.out.println("Took " + timeDiff + "ms to find move and explored " + exploredStates + " states");
 			
-				if (nextMove != null)
-				{
+				if (nextMove != null) {
 					currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
 					currBoard.render();
-					
 				}
 				else
 					System.out.println("No available moves.");
@@ -58,24 +61,20 @@ public class Reversi {
 			int humanMoveY = GameScanner.nextInt();
 			
 			//returns true if valid placement
-			if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true))
-			{
+			if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
 				human = false;
 			}
-			else
-			{
+			else {
 				System.out.println("Invalid move.");
 				human = true;
 			}
 			currPlayer = !currPlayer;
 			
 			//checks for move availability in both parties, ends game if no available moves
-			if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer))
-			{
+			if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer)) {
 				cont = true;
 			}
-			else
-			{
+			else {
 				System.out.println("Game Over. No available moves");
 				cont = false;
 				
@@ -97,6 +96,7 @@ public class Reversi {
 		if (player == WHITE) {
 			possibleMoves = state.getValidMoves(WHITE);
 			for (int[] move : possibleMoves) {
+				exploredStates++;
 				child = state.child(move, WHITE);
 				value = alphaBeta(child, depth + 1, a, b, BLACK)[0][0];
 				if (value > a) {
@@ -111,6 +111,7 @@ public class Reversi {
 		} else {
 			possibleMoves = state.getValidMoves(BLACK);
 			for (int[] move : possibleMoves) {
+				exploredStates++;
 				child = state.child(move, BLACK);
 				value = alphaBeta(child, depth + 1, a, b, WHITE)[0][0];
 				if (value < b) {

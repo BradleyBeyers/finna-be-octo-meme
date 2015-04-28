@@ -7,6 +7,14 @@ public class Board {
 	public int turncount;
 	public boolean validate;
 	public int pathlength;
+	public int[][] scoreBoard = {{1, 1, 1, 1, 1, 1, 1, 1},
+								 {1, 1, 1, 1, 1, 1, 1, 1},
+								 {1, 1, 1, 1, 1, 1, 1, 1},
+								 {1, 1, 1, 1, 1, 1, 1, 1},
+								 {1, 1, 1, 1, 1, 1, 1, 1},
+								 {1, 1, 1, 1, 1, 1, 1, 1},
+								 {1, 1, 1, 1, 1, 1, 1, 1},
+								 {1, 1, 1, 1, 1, 1, 1, 1}};
 	
 	public Board(int Size)
 	{
@@ -227,9 +235,9 @@ public class Board {
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces.length; j++) {
 				if (pieces[i][j] != null && pieces[i][j].color == true) {
-					score++;
+					score += scoreBoard[i][j];
 				} else if (pieces[i][j] != null && pieces[i][j].color == false) {
-					score--;
+					score -= scoreBoard[i][j];
 				}
 			}
 		}
