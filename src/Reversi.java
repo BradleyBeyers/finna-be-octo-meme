@@ -71,6 +71,11 @@ public class Reversi {
 			if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
 				human = false;
 			}
+			else if (currBoard.MoveDetection(currPlayer))
+			{
+				human = false;
+				System.out.println("No valid moves for human player");
+			}
 			else {
 				System.out.println("Invalid move.");
 				human = true;
