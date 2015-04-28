@@ -11,8 +11,11 @@ public class Reversi {
 	
 	public static Board board = new Board(8);
 
-	public static void main (String[] args) {
+	public static void main (String[] args) 
+	{
+		System.out.println("Skynet Online.");
 		gameAI();
+		System.out.println("Skynet Offline.");
 	}
 
 	public static void gameAI() {
