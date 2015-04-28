@@ -27,24 +27,28 @@ public class Reversi {
 		timeLim = Integer.valueOf(initSplit[3]);
 		totalTimeLim = Integer.valueOf(initSplit[4]);
 
+		boolean human = false;
+
 		if (initSplit[1].equals("B")) {
 			currPlayer = BLACK;
+			human = false;
 		} else if (initSplit[1].equals("W")) {
 			currPlayer = WHITE;
+			human = true;
+			currBoard.render();
 		}
 
 		boolean cont = true;
-		boolean human = false;
 		
 		while (cont) { // Loops forever for now, later will have logic to detect gamestate and end when appropriate
 			
 			//to prevent turn skipping if the player tries to enter an invalid move
 			if (!human) {
 				exploredStates = 0;
-				long startTime = System.currentTimeMillis();
+				long startTime = System.currentTimeMillis(); // Measures the time before the move is found
 				int[] nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1]; // AI always goes first (for now)
-				long endTime = System.currentTimeMillis();
-				long timeDiff = endTime - startTime;
+				long endTime = System.currentTimeMillis(); // Measures the time after the move is found
+				long timeDiff = endTime - startTime; // Takes the difference between the two times to determine how long the move took
 				System.out.println("Took " + timeDiff + "ms to find move and explored " + exploredStates + " states");
 			
 				if (nextMove != null) {
