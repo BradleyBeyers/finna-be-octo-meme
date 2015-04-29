@@ -234,7 +234,7 @@ public class Board {
 		int score = 0;
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces.length; j++) {
-				if (pieces[i][j] != null && pices[i][j].color == player) {
+				if (pieces[i][j] != null && pieces[i][j].color == player) {
 					score += scoreBoard[i][j];
 				} else if (pieces[i][j] != null && pieces[i][j].color != player) {
 					score -= scoreBoard[i][j];
