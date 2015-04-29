@@ -42,9 +42,9 @@ public class Reversi {
 		}
 
 		boolean cont = true;
-		
+
 		while (cont) { // Loops forever for now, later will have logic to detect gamestate and end when appropriate
-			
+
 			//to prevent turn skipping if the player tries to enter an invalid move
 			if (!human) {
 				exploredStates = 0;
@@ -53,7 +53,7 @@ public class Reversi {
 				long endTime = System.currentTimeMillis(); // Measures the time after the move is found
 				long timeDiff = endTime - startTime; // Takes the difference between the two times to determine how long the move took
 				System.out.println("Took " + timeDiff + "ms to find move and explored " + exploredStates + " states");
-			
+
 				if (nextMove != null && nextMove[0] != -1 && nextMove[1] != -1) {
 					currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
 					currBoard.render();
@@ -63,25 +63,35 @@ public class Reversi {
 			}
 			currPlayer = !currPlayer;
 			human = true;
-			
+
 			int humanMoveX = GameScanner.nextInt();
 			int humanMoveY = GameScanner.nextInt();
-			
+
 			//returns true if valid placement
 			if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
 				human = false;
 			}
-			else if (currBoard.MoveDetection(currPlayer))
+		
+			/*else if (currBoard.MoveDetection(currPlayer))
 			{
 				human = false;
 				System.out.println("No valid moves for human player");
-			}
+			}*/
 			else {
-				System.out.println("Invalid move.");
-				human = true;
+				while (human)
+				{
+					System.out.println("Invalid move.");
+					humanMoveX = GameScanner.nextInt();
+					humanMoveY = GameScanner.nextInt();
+					if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
+						human = false;
+					}
+					else
+					human = true;
+				}
 			}
 			currPlayer = !currPlayer;
-			
+
 			//checks for move availability in both parties, ends game if no available moves
 			if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer)) {
 				cont = true;
@@ -89,7 +99,7 @@ public class Reversi {
 			else {
 				System.out.println("Game Over. No available moves");
 				cont = false;
-				
+
 			}
 		}
 	}
