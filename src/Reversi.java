@@ -119,7 +119,7 @@ public class Reversi {
 		int value;
 		Board child;
 		int[] bestMove = {-1, -1};
-		int[][] retvalue = {{state.getValue()}, bestMove}; // Moves are coded as an integer array of the form [X, Y]
+		int[][] retvalue = {{state.getValue(player)}, bestMove}; // Moves are coded as an integer array of the form [X, Y]
 		ArrayList<int[]> possibleMoves = new ArrayList<int[]>(0);
 		if (depth == depthLim) return retvalue;
 

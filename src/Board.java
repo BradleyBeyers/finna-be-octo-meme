@@ -229,7 +229,7 @@ public class Board {
 		return new Board(c);
 	}
 
-	public int getValue() { // Heuristic function for determining how good a board is (Can be increased in complexity, currently every white piece is +1 and every black piece is -1)
+	public int getValue(boolean player) { // Heuristic function for determining how good a board is (Can be increased in complexity, currently every white piece is +1 and every black piece is -1)
 		int max = 0;
 		int min = 0;
 		int coins;
@@ -238,9 +238,9 @@ public class Board {
 		
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces.length; j++) {
-				if (pieces[i][j] != null && pieces[i][j].color == true) {
+				if (pieces[i][j] != null && pieces[i][j].color == player) {
 					max += scoreBoard[i][j];
-				} else if (pieces[i][j] != null && pieces[i][j].color == false) {
+				} else if (pieces[i][j] != null && pieces[i][j].color != player) {
 					min += scoreBoard[i][j];
 				}
 			}
