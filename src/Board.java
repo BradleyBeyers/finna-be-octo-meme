@@ -232,7 +232,10 @@ public class Board {
 	public int getValue() { // Heuristic function for determining how good a board is (Can be increased in complexity, currently every white piece is +1 and every black piece is -1)
 		int max = 0;
 		int min = 0;
-
+		int coins;
+		int mobility;
+		int stability;
+		
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces.length; j++) {
 				if (pieces[i][j] != null && pieces[i][j].color == true) {
@@ -242,7 +245,11 @@ public class Board {
 				}
 			}
 		}
-		int score = 100*((max-min)/(max+min));
-		return score;
+		if (max+min != 0)
+			coins = 100*((max-min)/(max+min));
+		else
+			coins = 0;
+		
+		return coins;
 	}
 }
