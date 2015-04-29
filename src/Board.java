@@ -26,6 +26,7 @@ public class Board {
 		this.pieces = p;
 	}
 
+	
 	public void startup()
 	{
 		pieces[size/2][size/2] = new Piece(size/2, size/2, true);

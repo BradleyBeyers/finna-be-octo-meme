@@ -8,18 +8,47 @@ public class Reversi {
 	public static int timeLim;
 	public static int totalTimeLim;
 	public static int exploredStates;
+	public static int white = 0;
+	public static int black = 0;
+	public static Board currBoard;
 	
-	public static Board board = new Board(8);
+	//public static Board board = new Board(8);
 
 	public static void main (String[] args) 
 	{
 		System.out.println("Skynet Online.");
 		gameAI();
 		System.out.println("Skynet Offline.");
+		
+		for (int i = 0; i < currBoard.pieces.length; i++)
+		{
+			for (int j = 0; j < currBoard.pieces[i].length; j++)
+			{
+				if (currBoard.pieces[i][j] != null && currBoard.pieces[i][j].color == WHITE)
+					white++;
+				else if (currBoard.pieces[i][j] != null && currBoard.pieces[i][j].color == BLACK)
+					black++;
+			}
+		}
+		if (black>white)
+		{
+			System.out.println("White: " + white + "  Black: " + black);
+			System.out.println("Black Wins!! Nice!!");
+		}
+		else if (white>black)
+		{
+			System.out.println("White: " + white + "  Black: " + black);
+			System.out.println("White Wins!! Sweet!!");
+		}
+		else
+		{
+			System.out.println("White: " + white + "  Black: " + black);
+			System.out.println("It's a tie!! Woah!!");
+		}
 	}
 
 	public static void gameAI() {
-		Board currBoard = new Board(8); //Create a board and declare needed variables for alphabeta
+		currBoard = new Board(8); //Create a board and declare needed variables for alphabeta
 		boolean currPlayer = false;
 		currBoard.startup();
 
@@ -47,6 +76,13 @@ public class Reversi {
 
 			//to prevent turn skipping if the player tries to enter an invalid move
 			if (!human) {
+				if (!currBoard.MoveDetection(currPlayer))
+				{
+					human = true;
+					System.out.println("No valid moves for computer player");
+				}
+				else
+				{
 				exploredStates = 0;
 				long startTime = System.currentTimeMillis(); // Measures the time before the move is found
 				int[] nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1]; // AI always goes first (for now)
@@ -60,6 +96,7 @@ public class Reversi {
 				}
 				else
 					System.out.println("No available moves.");
+				}
 			}
 			currPlayer = !currPlayer;
 			human = true;
@@ -74,22 +111,35 @@ public class Reversi {
 				int humanMoveX = GameScanner.nextInt();
 				int humanMoveY = GameScanner.nextInt();
 
-				//returns true if valid placement
-				if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
-					human = false;
-				}
-
-				else {
-					while (human)
+				if (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7)
+				{
+					while (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7)
 					{
-						System.out.println("Invalid move, Enter another.");
+						System.out.println("Not a valid number, Try Again");
 						humanMoveX = GameScanner.nextInt();
 						humanMoveY = GameScanner.nextInt();
-						if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
-							human = false;
+					}
+				}
+				else
+				{
+
+					//returns true if valid placement
+					if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
+						human = false;
+					}
+
+					else {
+						while (human)
+						{
+							System.out.println("Invalid move, Enter another.");
+							humanMoveX = GameScanner.nextInt();
+							humanMoveY = GameScanner.nextInt();
+							if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
+								human = false;
+							}
+							else
+								human = true;
 						}
-						else
-							human = true;
 					}
 				}
 			}
@@ -152,14 +202,14 @@ public class Reversi {
 			}
 			retvalue[0][0] = b;
 			if (bestMove[0] == -1 && bestMove[1] == -1)
-					retvalue[1] = null;
+				retvalue[1] = null;
 			else 
 				retvalue[1] = bestMove;
 			return retvalue;
 		}
 	}
 
-	public static void startGame() {
+	/*public static void startGame() {
 		int white = 0;
 		int black = 0;
 		//Board board = new Board(8);
@@ -220,7 +270,7 @@ public class Reversi {
 			System.out.println("White: " + white + "  Black: " + black);
 			System.out.println("It's a tie!! Woah!!");
 		}
-	}
+	}*/
 }
 
 // Turn framework, performs all the functions of a turn
