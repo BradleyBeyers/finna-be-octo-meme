@@ -241,6 +241,7 @@ public class Board {
 				}
 			}
 		}
+		return score;
 	}
 
 	public int getValue(boolean player) { // Heuristic function for determining how good a board is (Can be increased in complexity, currently every white piece is +1 and every black piece is -1)
