@@ -11,6 +11,7 @@ public class Reversi {
 	public static int white = 0;
 	public static int black = 0;
 	public static Board currBoard;
+	public static boolean AiPlayer = false;
 	
 	//public static Board board = new Board(8);
 
@@ -63,9 +64,11 @@ public class Reversi {
 
 		if (initSplit[1].equals("B")) {
 			currPlayer = BLACK;
+			AiPlayer = BLACK;
 			human = false;
 		} else if (initSplit[1].equals("W")) {
 			currPlayer = WHITE;
+			AiPlayer = WHITE;
 			human = true;
 			currBoard.render();
 		}
@@ -169,7 +172,7 @@ public class Reversi {
 		int value;
 		Board child;
 		int[] bestMove = {-1, -1};
-		int[][] retvalue = {{state.getValue(player)}, bestMove}; // Moves are coded as an integer array of the form [X, Y]
+		int[][] retvalue = {{state.h(player)}, bestMove}; // Moves are coded as an integer array of the form [X, Y]
 		ArrayList<int[]> possibleMoves = new ArrayList<int[]>(0);
 		if (depth == depthLim) return retvalue;
 
