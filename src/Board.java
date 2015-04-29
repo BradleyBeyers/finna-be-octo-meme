@@ -233,8 +233,8 @@ public class Board {
 		int max = 0;
 		int min = 0;
 		int coins;
-		int mobility;
-		int stability;
+		int mobility = 100;
+		int stability = 100;
 		
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces.length; j++) {
@@ -250,6 +250,7 @@ public class Board {
 		else
 			coins = 0;
 		
-		return coins;
+		//returns a value between -100 and 100
+		return (int)((coins * 0.6) + (mobility * 0.2) + (stability * 0.2));
 	}
 }
