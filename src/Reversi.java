@@ -64,30 +64,33 @@ public class Reversi {
 			currPlayer = !currPlayer;
 			human = true;
 
-			int humanMoveX = GameScanner.nextInt();
-			int humanMoveY = GameScanner.nextInt();
-
-			//returns true if valid placement
-			if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
-				human = false;
-			}
-		
-			/*else if (currBoard.MoveDetection(currPlayer))
+			if (!currBoard.MoveDetection(currPlayer))
 			{
 				human = false;
 				System.out.println("No valid moves for human player");
-			}*/
-			else {
-				while (human)
-				{
-					System.out.println("Invalid move.");
-					humanMoveX = GameScanner.nextInt();
-					humanMoveY = GameScanner.nextInt();
-					if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
-						human = false;
+			}
+			else
+			{
+				int humanMoveX = GameScanner.nextInt();
+				int humanMoveY = GameScanner.nextInt();
+
+				//returns true if valid placement
+				if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
+					human = false;
+				}
+
+				else {
+					while (human)
+					{
+						System.out.println("Invalid move, Enter another.");
+						humanMoveX = GameScanner.nextInt();
+						humanMoveY = GameScanner.nextInt();
+						if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
+							human = false;
+						}
+						else
+							human = true;
 					}
-					else
-					human = true;
 				}
 			}
 			currPlayer = !currPlayer;
@@ -100,6 +103,11 @@ public class Reversi {
 				System.out.println("Game Over. No available moves");
 				cont = false;
 
+			}
+			if (currBoard.GameOver())
+			{
+				System.out.println("Game Over. Board is Filled");
+				cont = false;
 			}
 		}
 	}
