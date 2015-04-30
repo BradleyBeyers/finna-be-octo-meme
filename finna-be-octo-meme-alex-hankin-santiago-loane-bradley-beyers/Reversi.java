@@ -75,7 +75,7 @@ public class Reversi {
 
 		boolean cont = true;
 
-		while (cont) { // Loops forever for now, later will have logic to detect gamestate and end when appropriate
+		while (cont) { 
 
 			//to prevent turn skipping if the player tries to enter an invalid move
 			if (!human) {
@@ -93,9 +93,12 @@ public class Reversi {
 				long timeDiff = endTime - startTime; // Takes the difference between the two times to determine how long the move took
 				System.out.println("Took " + timeDiff + "ms to find move and explored " + exploredStates + " states");
 
-				if (nextMove != null && nextMove[0] != -1 && nextMove[1] != -1) {
-					currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
-					currBoard.render();
+				if(currBoard.MoveDetection(currPlayer) && nextMove != null)
+				{
+					//if (nextMove != null && nextMove[0] != -1 && nextMove[1] != -1) {
+						currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
+						currBoard.render();
+					//}
 				}
 				else
 					System.out.println("No available moves.");
