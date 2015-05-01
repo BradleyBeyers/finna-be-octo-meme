@@ -2,8 +2,8 @@ import java.util.*;
 import java.io.*;
 // driver program
 public class Reversi {
-	public final static boolean WHITE = true;
-	public final static boolean BLACK = false;
+	public final static boolean WHITE = true; // Used sometimes for clarity instead of true
+	public final static boolean BLACK = false; // Used sometimes for clarity instead of false
 	public static int depthLim;
 	public static int timeLim;
 	public static int totalTimeLim;
@@ -53,13 +53,13 @@ public class Reversi {
 
 	public static void gameAI() {
 		currBoard = new Board(8); //Create a board and declare needed variables for alphabeta
-		boolean currPlayer = false;
 		currBoard.startup();
 
-		Scanner GameScanner = new Scanner(System.in); //Parse initial input to start up the game
+		Scanner GameScanner = new Scanner(System.in); //Scanner to parse the initial input that starts the game
 		String init = GameScanner.nextLine();
 		String[] initSplit = init.split(" ");
-		int[] nextMove;
+		boolean currPlayer = BLACK; // Represents who the current player is (true for white, false for black)
+		int[] nextMove = null;
 		depthLim = Integer.valueOf(initSplit[2]);
 		timeLim = Integer.valueOf(initSplit[3]);
 		totalTimeLim = Integer.valueOf(initSplit[4]);
@@ -73,11 +73,9 @@ public class Reversi {
 		}
 
 		if (initSplit[1].equals("B")) {
-			currPlayer = BLACK;
 			AiPlayer = BLACK;
 			human = false;
 		} else if (initSplit[1].equals("W")) {
-			currPlayer = WHITE;
 			AiPlayer = WHITE;
 			human = true;
 			currBoard.render();
@@ -89,52 +87,48 @@ public class Reversi {
 
 			//to prevent turn skipping if the player tries to enter an invalid move
 			if (!human) {
-				if (!currBoard.MoveDetection(currPlayer))
-				{
+				if (!currBoard.MoveDetection(currPlayer)) {
 					human = true;
 					System.out.println("No valid moves for computer player");
 				}
-				else
-				{
-				exploredStates = 0;
+				else {
+					exploredStates = 0;
 				
-				if (timeLim != 0) { // If we've got a time limit...
-					depthLim = 0; // Reset the depth limit
-					nextMove = null;
-					startTime = System.currentTimeMillis(); // Measure the time before the move is found
-					endTime = System.currentTimeMillis();
-					elapsed = endTime - startTime;
-					while (elapsed < timeLim - 50) { // Perform iterative deepening with alphabeta to find the move. Cuts off if within 50ms of the time limit
+					if (timeLim != 0) { // If we've got a time limit...
+						depthLim = 0; // Reset the depth limit
+						nextMove = null;
+						startTime = System.currentTimeMillis(); // Measure the time before the move is found
+						endTime = System.currentTimeMillis();
+						elapsed = endTime - startTime;
+						while (elapsed < timeLim - 50) { // Perform iterative deepening with alphabeta to find the move. Cuts off if within 50ms of the time limit
+							nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1];
+							depthLim++;
+						}
+						System.out.println("Took " + elapsed + "ms to find move and explored " + exploredStates + " states to a depth of " +  depthLim);
+					} else { // Otherwise, we have a depth limit
+						elapsed = -Integer.MAX_VALUE; // Set the elapsed time to the lowest possible value to avoid triggering the time limit cutoff
 						nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1];
-						depthLim++;
 					}
-					System.out.println("Took " + elapsed + "ms to find move and explored " + exploredStates + " states to a depth of " +  depthLim);
-				} else { // Otherwise, we have a depth limit
-					elapsed = -Integer.MAX_VALUE; // Set the elapsed time to the lowest possible value to avoid triggering the time limit cutoff
-					nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1];
-				}
 
-				if(currBoard.MoveDetection(currPlayer) && nextMove != null)
-				{
-					//if (nextMove != null && nextMove[0] != -1 && nextMove[1] != -1) {
-						currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
-						currBoard.render();
-					//}
-				}
-				else
-					System.out.println("No available moves.");
+					if(currBoard.MoveDetection(currPlayer) && nextMove != null) {
+						//if (nextMove != null && nextMove[0] != -1 && nextMove[1] != -1) {
+							currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
+							currBoard.render();
+						//}
+					}
+					else
+						System.out.println("No available moves.");
 				}
 			}
+
 			currPlayer = !currPlayer;
 			human = true;
 
-			if (!currBoard.MoveDetection(currPlayer))
-			{
+			if (!currBoard.MoveDetection(currPlayer)) {
 				human = false;
 				System.out.println("No valid moves for human player");
 			}
-			else
-			{
+			else {
 				int humanMoveX = GameScanner.nextInt();
 				int humanMoveY = GameScanner.nextInt();
 
@@ -147,8 +141,7 @@ public class Reversi {
 						humanMoveY = GameScanner.nextInt();
 					}
 				}
-				else
-				{
+				else {
 
 					//returns true if valid placement
 					if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
@@ -156,8 +149,7 @@ public class Reversi {
 					}
 
 					else {
-						while (human)
-						{
+						while (human) {
 							System.out.println("Invalid move, Enter another.");
 							humanMoveX = GameScanner.nextInt();
 							humanMoveY = GameScanner.nextInt();
@@ -176,8 +168,7 @@ public class Reversi {
 			if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer)) {
 				cont = true;
 			}
-			else if (currBoard.GameOver())
-				{
+			else if (currBoard.GameOver()) {
 					System.out.println("Game Over. Board is Filled");
 					cont = false;
 				}
@@ -187,10 +178,8 @@ public class Reversi {
 
 			}
 		}
-		for (int i = 0; i < currBoard.pieces.length; i++)
-		{
-			for (int j = 0; j < currBoard.pieces[i].length; j++)
-			{
+		for (int i = 0; i < currBoard.pieces.length; i++) {
+			for (int j = 0; j < currBoard.pieces[i].length; j++) {
 				if (currBoard.pieces[i][j] != null && currBoard.pieces[i][j].color == WHITE)
 					white++;
 				else if (currBoard.pieces[i][j] != null && currBoard.pieces[i][j].color == BLACK)
@@ -198,18 +187,15 @@ public class Reversi {
 			}
 		}
 		
-		if (black>white)
-		{
+		if (black>white) {
 			System.out.println("White: " + white + "  Black: " + black);
 			System.out.println("Black Wins!! Nice!!");
 		}
-		else if (white>black)
-		{
+		else if (white>black) {
 			System.out.println("White: " + white + "  Black: " + black);
 			System.out.println("White Wins!! Sweet!!");
 		}
-		else
-		{
+		else {
 			System.out.println("White: " + white + "  Black: " + black);
 			System.out.println("It's a tie!! Woah!!");
 		}
