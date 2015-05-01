@@ -156,8 +156,8 @@ public class Board {
 			System.out.print(" " + i);
 			for(int j=0; j<pieces[i].length; j++) {
 				if (pieces[i][j] == null)
-					System.out.print(" - ");
-				else System.out.print(" " + pieces[i][j].toString() + " ");
+					System.out.print(" -  ");
+				else System.out.print(" " + pieces[i][j].toString() + "  ");
 			}
 			System.out.println();
 			System.out.println();

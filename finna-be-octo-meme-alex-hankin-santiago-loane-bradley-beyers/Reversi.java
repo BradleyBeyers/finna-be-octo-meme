@@ -8,8 +8,8 @@ public class Reversi {
 	public static int timeLim;
 	public static int totalTimeLim;
 	public static int exploredStates;
-	public static int white = 0;
-	public static int black = 0;
+	public int white = 0;
+	public int black = 0;
 	public static Board currBoard;
 	public static boolean AiPlayer = false;
 	
@@ -21,7 +21,7 @@ public class Reversi {
 		gameAI();
 		System.out.println("Skynet Offline.");
 		
-		for (int i = 0; i < currBoard.pieces.length; i++)
+		/*for (int i = 0; i < currBoard.pieces.length; i++)
 		{
 			for (int j = 0; j < currBoard.pieces[i].length; j++)
 			{
@@ -45,7 +45,7 @@ public class Reversi {
 		{
 			System.out.println("White: " + white + "  Black: " + black);
 			System.out.println("It's a tie!! Woah!!");
-		}
+		}*/
 	}
 
 	public static void gameAI() {
@@ -155,16 +155,42 @@ public class Reversi {
 			if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer)) {
 				cont = true;
 			}
+			else if (currBoard.GameOver())
+				{
+					System.out.println("Game Over. Board is Filled");
+					cont = false;
+				}
 			else {
 				System.out.println("Game Over. No available moves");
 				cont = false;
 
 			}
-			if (currBoard.GameOver())
+		}
+		for (int i = 0; i < currBoard.pieces.length; i++)
+		{
+			for (int j = 0; j < currBoard.pieces[i].length; j++)
 			{
-				System.out.println("Game Over. Board is Filled");
-				cont = false;
+				if (currBoard.pieces[i][j] != null && currBoard.pieces[i][j].color == WHITE)
+					white++;
+				else if (currBoard.pieces[i][j] != null && currBoard.pieces[i][j].color == BLACK)
+					black++;
 			}
+		}
+		
+		if (black>white)
+		{
+			System.out.println("White: " + white + "  Black: " + black);
+			System.out.println("Black Wins!! Nice!!");
+		}
+		else if (white>black)
+		{
+			System.out.println("White: " + white + "  Black: " + black);
+			System.out.println("White Wins!! Sweet!!");
+		}
+		else
+		{
+			System.out.println("White: " + white + "  Black: " + black);
+			System.out.println("It's a tie!! Woah!!");
 		}
 	}
 
