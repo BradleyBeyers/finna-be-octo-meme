@@ -61,6 +61,7 @@ public class Reversi {
 		String[] initSplit = init.split(" ");
 		boolean currPlayer = BLACK; // Represents who the current player is (true for white, false for black)
 		int[] nextMove = null;
+		int[] newMove = null;
 		depthLim = Integer.valueOf(initSplit[2]);
 		timeLim = Integer.valueOf(initSplit[3]);
 		totalTimeLim = Integer.valueOf(initSplit[4]);
@@ -97,8 +98,9 @@ public class Reversi {
 						startTime = System.currentTimeMillis(); // Measure the time before the move is found
 						endTime = System.currentTimeMillis();
 						elapsed = endTime - startTime;
-						while (elapsed < timeLim - 50) { // Perform iterative deepening with alphabeta to find the move. Cuts off if within 50ms of the time limit
-							nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, AiPlayer)[1];
+						while (elapsed + 50 < timeLim) { // Perform iterative deepening with alphabeta to find the move. Cuts off if within 50ms of the time limit
+							nextMove = newMove; // Since alphabeta sometimes returns before the depth limit is reached, we store the current best move here
+							newMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, AiPlayer)[1];
 							depthLim++;
 						}
 						System.out.println("Took " + elapsed + "ms to find move and explored " + exploredStates + " states to a depth of " +  depthLim);
@@ -197,7 +199,7 @@ public class Reversi {
 		int value;
 		Board child;
 		int[] bestMove = {-1, -1};
-		int[][] retvalue = {{state.h(player)}, bestMove}; // Moves are coded as an integer array of the form [X, Y]
+		int[][] retvalue = {{state.h(AiPlayer)}, bestMove}; // Moves are coded as an integer array of the form [X, Y]
 		ArrayList<int[]> possibleMoves = new ArrayList<int[]>(0);
 
 		if (timeLim != 0) { // If there's a time limit, get the current elapsed time
@@ -207,32 +209,37 @@ public class Reversi {
 
 		if (depth == depthLim || elapsed + 50 > timeLim) return retvalue; // If we're at the depth limit or we're within a 50ms buffer time of the time limit, return
 
-		if (player == WHITE) {
-			possibleMoves = state.getValidMoves(WHITE);
+		if (player == AiPlayer) {
+			possibleMoves = state.getValidMoves(AiPlayer);
 			for (int[] move : possibleMoves) {
 				exploredStates++;
-				child = state.child(move, WHITE);
-				value = alphaBeta(child, depth + 1, a, b, BLACK)[0][0];
+				child = state.child(move, AiPlayer);
+				value = alphaBeta(child, depth + 1, a, b, !AiPlayer)[0][0];
 				if (value > a) {
 					a = value;
 					bestMove = move;
 				}
-				if (beta <= alpha) break;
+				if (beta <= alpha)
+					break;
 			}
 			retvalue[0][0] = a;
-			retvalue[1] = bestMove;
+			if (bestMove[0] == -1 && bestMove[1] == -1)
+				retvalue[1] = null;
+			else 
+				retvalue[1] = bestMove;
 			return retvalue;
 		} else {
-			possibleMoves = state.getValidMoves(BLACK);
+			possibleMoves = state.getValidMoves(!AiPlayer);
 			for (int[] move : possibleMoves) {
 				exploredStates++;
-				child = state.child(move, BLACK);
-				value = alphaBeta(child, depth + 1, a, b, WHITE)[0][0];
+				child = state.child(move, !AiPlayer);
+				value = alphaBeta(child, depth + 1, a, b, AiPlayer)[0][0];
 				if (value < b) {
 					b = value;
 					bestMove = move;
 				}
-				if (beta <= alpha) break;
+				if (beta <= alpha)
+					break;
 			}
 			retvalue[0][0] = b;
 			if (bestMove[0] == -1 && bestMove[1] == -1)
