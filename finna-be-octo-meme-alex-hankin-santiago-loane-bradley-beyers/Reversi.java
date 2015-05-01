@@ -12,6 +12,7 @@ public class Reversi {
 	public static int black = 0;
 	public static Board currBoard;
 	public static boolean AiPlayer = false;
+	public static boolean HumanPlayer = false;
 	public static long startTime;
 	public static long endTime;
 	public static long elapsed;
@@ -64,8 +65,6 @@ public class Reversi {
 		timeLim = Integer.valueOf(initSplit[3]);
 		totalTimeLim = Integer.valueOf(initSplit[4]);
 
-		boolean human = false;
-
 		if  (timeLim != 0) {
 			depthLim = 0;
 		} else if (depthLim == 0) { // Depth limit defaults to 3 if there is no time limit or depth limit specified
@@ -74,21 +73,19 @@ public class Reversi {
 
 		if (initSplit[1].equals("B")) {
 			AiPlayer = BLACK;
-			human = false;
+			HumanPlayer = WHITE;
 		} else if (initSplit[1].equals("W")) {
 			AiPlayer = WHITE;
-			human = true;
-			currBoard.render();
+			HumanPlayer = BLACK;
 		}
 
 		boolean cont = true;
 
 		while (cont) { 
-
+			currBoard.render();
 			//to prevent turn skipping if the player tries to enter an invalid move
-			if (!human) {
-				if (!currBoard.MoveDetection(currPlayer)) {
-					human = true;
+			if (currPlayer == AiPlayer) {
+				if (!currBoard.MoveDetection(AiPlayer)) {
 					System.out.println("No valid moves for computer player");
 				}
 				else {
@@ -101,67 +98,62 @@ public class Reversi {
 						endTime = System.currentTimeMillis();
 						elapsed = endTime - startTime;
 						while (elapsed < timeLim - 50) { // Perform iterative deepening with alphabeta to find the move. Cuts off if within 50ms of the time limit
-							nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1];
+							nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, AiPlayer)[1];
 							depthLim++;
 						}
 						System.out.println("Took " + elapsed + "ms to find move and explored " + exploredStates + " states to a depth of " +  depthLim);
 					} else { // Otherwise, we have a depth limit
 						elapsed = -Integer.MAX_VALUE; // Set the elapsed time to the lowest possible value to avoid triggering the time limit cutoff
-						nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1];
+						nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, AiPlayer)[1];
 					}
 
-					if(currBoard.MoveDetection(currPlayer) && nextMove != null) {
+					if(currBoard.MoveDetection(AiPlayer) && nextMove != null) {
 						//if (nextMove != null && nextMove[0] != -1 && nextMove[1] != -1) {
-							currBoard.place(new Piece(nextMove[0], nextMove[1], currPlayer), true);
-							currBoard.render();
+							currBoard.place(new Piece(nextMove[0], nextMove[1], AiPlayer), true);
 						//}
 					}
 					else
 						System.out.println("No available moves.");
 				}
-			}
+			} else if (currPlayer == HumanPlayer) {
 
-			currPlayer = !currPlayer;
-			human = true;
-
-			if (!currBoard.MoveDetection(currPlayer)) {
-				human = false;
-				System.out.println("No valid moves for human player");
-			}
-			else {
-				int humanMoveX = GameScanner.nextInt();
-				int humanMoveY = GameScanner.nextInt();
-
-				if (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7)
-				{
-					while (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7)
-					{
-						System.out.println("Not a valid number, Try Again");
-						humanMoveX = GameScanner.nextInt();
-						humanMoveY = GameScanner.nextInt();
-					}
+				if (!currBoard.MoveDetection(HumanPlayer)) {
+					System.out.println("No valid moves for human player");
 				}
 				else {
+					int humanMoveX = GameScanner.nextInt();
+					int humanMoveY = GameScanner.nextInt();
 
-					//returns true if valid placement
-					if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
-						human = false;
-					}
-
-					else {
-						while (human) {
-							System.out.println("Invalid move, Enter another.");
+					if (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7)
+					{
+						while (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7)
+						{
+							System.out.println("Not a valid number, Try Again");
 							humanMoveX = GameScanner.nextInt();
 							humanMoveY = GameScanner.nextInt();
-							if (currBoard.place(new Piece(humanMoveY, humanMoveX, currPlayer), true)) {
-								human = false;
+						}
+					}
+					else {
+						boolean validMove = false;
+						//returns true if valid placement
+						if (currBoard.place(new Piece(humanMoveY, humanMoveX, HumanPlayer), true)) {
+							validMove = false;
+						} else {
+							while (!validMove) {
+								System.out.println("Invalid move, Enter another.");
+								humanMoveX = GameScanner.nextInt();
+								humanMoveY = GameScanner.nextInt();
+								if (currBoard.place(new Piece(humanMoveY, humanMoveX, HumanPlayer), true)) {
+									validMove = true;
+								}
+								else
+									validMove = false;
 							}
-							else
-								human = true;
 						}
 					}
 				}
 			}
+
 			currPlayer = !currPlayer;
 
 			//checks for move availability in both parties, ends game if no available moves
