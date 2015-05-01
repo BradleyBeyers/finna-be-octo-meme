@@ -124,10 +124,8 @@ public class Reversi {
 					int humanMoveX = GameScanner.nextInt();
 					int humanMoveY = GameScanner.nextInt();
 
-					if (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7)
-					{
-						while (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7)
-						{
+					if (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7) {
+						while (humanMoveX < 0 || humanMoveX > 7 || humanMoveY < 0 || humanMoveY > 7) {
 							System.out.println("Not a valid number, Try Again");
 							humanMoveX = GameScanner.nextInt();
 							humanMoveY = GameScanner.nextInt();
@@ -159,17 +157,16 @@ public class Reversi {
 			//checks for move availability in both parties, ends game if no available moves
 			if (currBoard.MoveDetection(currPlayer) || currBoard.MoveDetection(!currPlayer)) {
 				cont = true;
-			}
-			else if (currBoard.GameOver()) {
+			} else if (currBoard.GameOver()) {
 					System.out.println("Game Over. Board is Filled");
 					cont = false;
-				}
-			else {
+			} else {
 				System.out.println("Game Over. No available moves");
 				cont = false;
 
 			}
 		}
+
 		for (int i = 0; i < currBoard.pieces.length; i++) {
 			for (int j = 0; j < currBoard.pieces[i].length; j++) {
 				if (currBoard.pieces[i][j] != null && currBoard.pieces[i][j].color == WHITE)
