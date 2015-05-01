@@ -12,6 +12,9 @@ public class Reversi {
 	public int black = 0;
 	public static Board currBoard;
 	public static boolean AiPlayer = false;
+	public static long startTime;
+	public static long endTime;
+	public static long elapsed;
 	
 	//public static Board board = new Board(8);
 
@@ -56,11 +59,16 @@ public class Reversi {
 		Scanner GameScanner = new Scanner(System.in); //Parse initial input to start up the game
 		String init = GameScanner.nextLine();
 		String[] initSplit = init.split(" ");
+		int[] nextMove;
 		depthLim = Integer.valueOf(initSplit[2]);
 		timeLim = Integer.valueOf(initSplit[3]);
 		totalTimeLim = Integer.valueOf(initSplit[4]);
 
 		boolean human = false;
+
+		if  (timeLim != 0) {
+			depthLim = 0;
+		}
 
 		if (initSplit[1].equals("B")) {
 			currPlayer = BLACK;
@@ -87,11 +95,22 @@ public class Reversi {
 				else
 				{
 				exploredStates = 0;
-				long startTime = System.currentTimeMillis(); // Measures the time before the move is found
-				int[] nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1]; // AI always goes first (for now)
-				long endTime = System.currentTimeMillis(); // Measures the time after the move is found
-				long timeDiff = endTime - startTime; // Takes the difference between the two times to determine how long the move took
-				System.out.println("Took " + timeDiff + "ms to find move and explored " + exploredStates + " states");
+				
+				if (timeLim != 0) { // If we've got a time limit...
+					depthLim = 0; // Reset the depth limit
+					nextMove = null;
+					startTime = System.currentTimeMillis(); // Measure the time before the move is found
+					endTime = System.currentTimeMillis();
+					elapsed = endTime - startTime;
+					while (elapsed < timeLim - 50) { // Perform iterative deepening with alphabeta to find the move. Cuts off if within 50ms of the time limit
+						nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1];
+						depthLim++;
+					}
+					System.out.println("Took " + elapsed + "ms to find move and explored " + exploredStates + " states to a depth of " +  depthLim);
+				} else { // Otherwise, we have a depth limit
+					elapsed = -Integer.MAX_VALUE; // Set the elapsed time to the lowest possible value to avoid triggering the time limit cutoff
+					nextMove = alphaBeta(currBoard.copy(), 0, -Integer.MAX_VALUE, Integer.MAX_VALUE, currPlayer)[1];
+				}
 
 				if(currBoard.MoveDetection(currPlayer) && nextMove != null)
 				{
@@ -203,7 +222,13 @@ public class Reversi {
 		int[] bestMove = {-1, -1};
 		int[][] retvalue = {{state.h(player)}, bestMove}; // Moves are coded as an integer array of the form [X, Y]
 		ArrayList<int[]> possibleMoves = new ArrayList<int[]>(0);
-		if (depth == depthLim) return retvalue;
+
+		if (timeLim != 0) { // If there's a time limit, get the current elapsed time
+			endTime = System.currentTimeMillis();
+			elapsed = endTime - startTime;
+		}
+
+		if (depth == depthLim || elapsed + 50 > timeLim) return retvalue; // If we're at the depth limit or we're within a 50ms buffer time of the time limit, return
 
 		if (player == WHITE) {
 			possibleMoves = state.getValidMoves(WHITE);
