@@ -1,3 +1,5 @@
+/* Very small class used to represent pieces on the board. Most methods should be entirely self-explanatory
+ */
 
 public class Piece {
 
@@ -31,7 +33,8 @@ public class Piece {
 		else return "B";
 	}
 
-	public Piece copy() { // Used to avoid pointer ugliness
+	// Used to avoid pointer ugliness
+	public Piece copy() { 
 		return new Piece(this.x, this.y, this.color);
 	}
 }
