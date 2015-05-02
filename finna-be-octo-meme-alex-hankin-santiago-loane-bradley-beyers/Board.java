@@ -1,3 +1,7 @@
+/* Contains the 2D array used to represent the board as well as most of the logic used to alter game state
+ * Also has methods to find whether there are valid moves on the current board or get a list of valid moves
+ */
+
 import java.util.ArrayList;
 
 public class Board {
@@ -16,19 +20,20 @@ public class Board {
 								 {-8,	-24,	-4,	-3,	-3,	-4,	-24,	-8},
 								 {99,	 -8, 	 8,	 6,	 6,	 8,	 -8,	99}};
 	
-	public Board(int Size)
-	{
+	// Creates a SizeXSize board
+	public Board(int Size) {
 		pieces = new Piece[Size][Size];
 		size = Size;
 	}
-
+	
+	// Alternate contructor for a board which takes an already-created board in the form of its pieces array
+	// Used to easily create copies of boards to avoid pointer shenanigans
 	public Board(Piece[][] p) {
 		this.pieces = p;
 	}
 
-	
-	public void startup()
-	{
+	// Places all pieces at their initial positions to start up the game
+	public void startup() {
 		pieces[size/2][size/2] = new Piece(size/2, size/2, true);
 		pieces[(size/2)-1][size/2] = new Piece((size/2)-1, size/2, false);
 		pieces[size/2][(size/2)-1] = new Piece(size/2, (size/2)-1, false);
@@ -37,25 +42,24 @@ public class Board {
 		turncount = 0;
 	}
 	
-	public boolean place(Piece piece, boolean doFlip) {
+	// Attempts to place a piece. Returns a boolean representing whether placing said piece results in a valid move
+	// doFlip is true if the move should actually be executed and false if we just want to know if the move is valid
+	public boolean place(Piece piece, boolean doFlip) { 
 		validate = false;
-		if (pieces[piece.x][piece.y] == null)
-		{
+		if (pieces[piece.x][piece.y] == null) {
 			check(piece, doFlip);
-			if (validate)
-			{
+			if (validate) {
 				if (doFlip) pieces[piece.x][piece.y] = piece;
 				turncount++;
 				return true;
-			}
-			else
+			} else
 				return false;
-		}
-		else return false;
+		} else
+			return false;
 	}
 	
-	//checks from the piece AND SWITCHES VALID PIECES
-	//not a checker, more of a move() function
+	// Tells checkLine which direction to look in when making a move
+	// doFlip is passed in from place, and again decides if a move is actually executed or not
 	public boolean check(Piece piece, boolean doFlip) {
 		int dx = 0, dy = 0;
 		int i = 0;
@@ -103,35 +107,37 @@ public class Board {
 		return valid; //if valid = true, then it's a valid move and at least one piece has been flipped
 	}
 
-	// checks in a straight line to find if the new placement sandwiches pieces together, and converts them if necessary.
+	// checks in a straight line to find if the new placement sandwiches pieces together
 	// return true if it is a valid placement to flip pieces
+	// flips relevant pieces if doFlip (passed down from place) is true
 	public boolean checkLine(Piece piece, int dx, int dy, boolean doFlip) {
 		pathlength++; 
 		Piece temp = piece.copy();
+		// Make sure we're not going out of bounds or testing a piece that doesn't exist
 		if((temp.x + dx >= 0 || dx == 0) && (temp.y + dy >= 0 || dy == 0) && (temp.x + dx < pieces.length || dx == 0) && (temp.y + dy < pieces.length || dy == 0) && pieces[temp.x + dx][temp.y + dy] != null) {
 			temp.move(temp.x + dx,  temp.y + dy);
-			if ((pieces[temp.x][temp.y] != null) && (pieces[temp.x][temp.y].color == piece.color)) { // if piece i'm currently looking at exists and is of the same color as the original piece
+			if (pieces[temp.x][temp.y].color == piece.color) { // if piece i'm currently looking at is of the same color as the original piece
 				if (pathlength >= 1) // if it has at least one other piece between the two, it's valid
 					return true;
-				else return false; //otherwise false
-			}
-			else {
-					if (checkLine(temp, dx, dy, doFlip)) { //recursively see if it eventually makes a valid chain
-						if(pieces[temp.x][temp.y] == null) //if there's a gap in the middle
-							return false;
-						else { //otherwise valid, flip current piece
-							validate = true;
-							if (doFlip) pieces[temp.x][temp.y].flip();
-							return true;
-						}
+				else return false; //otherwise invalid
+			} else {
+				if (checkLine(temp, dx, dy, doFlip)) { //recursively see if it eventually makes a valid chain
+					if(pieces[temp.x][temp.y] == null) //if there's a gap in the middle, move isn't valid
+						return false; 
+					else { //otherwise valid, flip current piece
+						validate = true;
+						if (doFlip) pieces[temp.x][temp.y].flip();
+						return true;
 					}
-					else return false; // isn't a valid chain
-				}
-		}
-		else return false;
+				} else 
+					return false; // isn't a valid chain
+			}
+		} else 
+			return false;
 	}
 
-	public void render() { // Prints out the board with labeled rows / columns (used primarily for testing)
+	// Prints out the board with labeled rows / columns (used primarily for testing)
+	public void render() {
 		System.out.println("   0   1   2   3   4   5   6   7  ");
 		for(int i = 0; i< pieces.length; i++) {
 			System.out.print(" " + i);
@@ -146,7 +152,8 @@ public class Board {
 		System.out.println("------------------------------");
 	}
 	
-	public boolean GameOver() { // Detects whether the board is full
+	// Detects whether the board is full
+	public boolean GameOver() {
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces[i].length; j++) {
 				if (pieces[i][j] == null)
@@ -156,7 +163,8 @@ public class Board {
 		return true;
 	}
 	
-	public boolean MoveDetection(boolean color) { // Detects whether the player passed in has any valid moves
+	// Detects whether the given player has any valid moves
+	public boolean MoveDetection(boolean color) {
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces[i].length; j++) {
 				Piece PieceTester = new Piece(i,j,color);
@@ -167,15 +175,16 @@ public class Board {
 		return false;
 	}
 
-	public ArrayList<int[]> getValidMoves(boolean color) { // Returns an ArrayList with all the valid moved for the player passed in (again, each move is coded as [X, Y])
+	// Returns an ArrayList with all the valid moved for the player passed in (again, each move is coded as [X, Y])
+	public ArrayList<int[]> getValidMoves(boolean color) {
 		ArrayList<int[]> out = new ArrayList<int[]>(0);
 
-		for (int i = 0; i < pieces.length; i++) {
+		for (int i = 0; i < pieces.length; i++) { // For each space on the board...
 			for (int j = 0; j < pieces[i].length; j++) {
 				Piece PieceTester = new Piece(i,j,color);
-				if (place(PieceTester, false)) {
+				if (place(PieceTester, false)) { // If placing a piece here would result in a valid move...
 					int[] newMove = {i, j};
-					out.add(newMove);
+					out.add(newMove); // Add the coordinates of the move to the output list
 				}
 			}
 		}
@@ -183,13 +192,15 @@ public class Board {
 		return out;
 	}
 
-	public Board child(int[] move, boolean color) { // Takes in an array representing a move with the form [X, Y] and the player making the move, the returns the resulting board
+	// Takes in an array representing a move with the form [X, Y] and the player making the move, the returns the resulting board
+	public Board child(int[] move, boolean color) {
 		Board temp = this.copy();
 		temp.place(new Piece(move[0], move[1], color), true);
 		return temp;
 	}
 
-	public Board copy() { // returns a copy of the board (used to avoid pointer shenanigans)
+	// Simply returns a copy of the board (used to avoid pointer shenanigans)
+	public Board copy() { 
 		Piece[][] c = new Piece[pieces.length][pieces.length];
 		for (int i = 0; i < pieces.length; i++) {
 			for (int j = 0; j < pieces.length; j++) {
@@ -205,42 +216,18 @@ public class Board {
 		return new Board(c);
 	}
 
+	// Heuristic function which returns a score for the current board for a given player according to who owns which spaces
 	public int h(boolean player) {
 		int score = 0;
-		for (int i = 0; i < pieces.length; i++) {
+		for (int i = 0; i < pieces.length; i++) { // For each space on the board...
 			for (int j = 0; j < pieces.length; j++) {
-				if (pieces[i][j] != null && pieces[i][j].color == player) {
-					score += scoreBoard[i][j];
-				} else if (pieces[i][j] != null && pieces[i][j].color != player) {
-					score -= scoreBoard[i][j];
+				if (pieces[i][j] != null && pieces[i][j].color == player) { // If the space belongs to the player passed in...
+					score += scoreBoard[i][j]; // Add the heuristic value of the current space to the score
+				} else if (pieces[i][j] != null && pieces[i][j].color != player) { // If it belongs to the opponent...
+					score -= scoreBoard[i][j]; // Subtract the heuristic value of the current space from the score
 				}
 			}
 		}
 		return score;
-	}
-
-	public int getValue(boolean player) { // Heuristic function for determining how good a board is (Can be increased in complexity, currently every white piece is +1 and every black piece is -1)
-		int max = 0;
-		int min = 0;
-		int coins;
-		int mobility = 100;
-		int stability = 100;
-		
-		for (int i = 0; i < pieces.length; i++) {
-			for (int j = 0; j < pieces.length; j++) {
-				if (pieces[i][j] != null && pieces[i][j].color == player) {
-					max += scoreBoard[i][j];
-				} else if (pieces[i][j] != null && pieces[i][j].color != player) {
-					min += scoreBoard[i][j];
-				}
-			}
-		}
-		if (max+min != 0)
-			coins = 100*((max-min)/(max+min));
-		else
-			coins = 0;
-		
-		//returns a value between -100 and 100
-		return (int)((coins * 0.6) + (mobility * 0.2) + (stability * 0.2));
 	}
 }
