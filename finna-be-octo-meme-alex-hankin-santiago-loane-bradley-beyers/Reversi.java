@@ -58,8 +58,6 @@ public class Reversi {
 
 		// Turn flow control as well as the AI handled here
 		while (true) { 
-			currBoard.render();
-
 			//checks for move availability in both parties, ends game if no available moves
 			if ((!currBoard.MoveDetection(WHITE) && !currBoard.MoveDetection(BLACK)) || currBoard.GameOver()) {
 				gameOver = true;
